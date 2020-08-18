@@ -13,7 +13,11 @@ export default class AdminHomePage extends Component {
           name={this.props.name}
           email={this.props.email}
         />
-        <OptionsMenu />
+        <OptionsMenu
+          keycloak={this.props.keycloak}
+          name={this.props.name}
+          email={this.props.email}
+        />
         <Footer />
       </div>
     );

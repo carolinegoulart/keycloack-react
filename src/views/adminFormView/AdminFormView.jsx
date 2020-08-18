@@ -6,7 +6,24 @@ import Form from '../../components/form/Form';
 import Footer from '../../components/footer/Footer';
 
 export default class AdminFormView extends Component {
+  state = {
+    keycloak: '',
+    name: '',
+    email: '',
+  };
+
+  componentDidMount() {
+    const { keycloak, name, email } = this.props.location.state;
+
+    this.setState(() => ({
+      keycloak,
+      name,
+      email,
+    }));
+  }
+
   render() {
+    console.log(this.props);
     return (
       <div>
         <NavBar
