@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
 import NavBar from '../../components/navbar/NavBar';
-import OptionsMenu from '../../components/optionsMenu/OptionsMenu';
 import Footer from '../../components/footer/Footer';
+import HomePage from '../../components/homePage/HomePage';
 
-export default class AdminHomePage extends Component {
+export default class UserImportView extends Component {
   render() {
     return (
       <div>
@@ -13,11 +13,7 @@ export default class AdminHomePage extends Component {
           name={this.props.name}
           email={this.props.email}
         />
-        <OptionsMenu
-          keycloak={this.props.keycloak}
-          name={this.props.name}
-          email={this.props.email}
-        />
+        <HomePage />
         <Footer />
       </div>
     );

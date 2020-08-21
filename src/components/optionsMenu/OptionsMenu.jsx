@@ -1,38 +1,39 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
 import { getFileModelo } from '../download/DownloadAction';
 
-class OptionsMenu extends Component {
+export default class OptionsMenu extends Component {
   render() {
-    // console.log(this.props);
     return (
       <div className="admin-menu">
         <div className="admin-menu-header">Selecione uma opção</div>
         <div className="buttons-admin-menu">
-          <Link
-            to={{
-              pathname: '/register',
-              state: {
-                keycloak: this.props.keycloak,
-                name: this.props.name,
-                email: this.props.email,
-              },
-            }}
+          <button
             className="button-admin"
+            id="register-campaign"
+            onClick={() => this.props.showFormPartner()}
+          >
+            Cadastrar novo parceiro
+          </button>
+          <button
+            className="button-admin"
+            id="register-partner"
+            onClick={() => this.props.showForm()}
           >
             Cadastrar nova campanha
-          </Link>
-          <Link
-            to={{ pathname: '/import' }}
+          </button>
+          <button
             className="button-admin"
-            onClick={getFileModelo}
+            id="import-csv"
+            onClick={() => {
+              this.props.showImport();
+              getFileModelo();
+            }}
           >
             Importar CSV da campanha
-          </Link>
+          </button>
         </div>
       </div>
     );
   }
 }
-export default OptionsMenu;

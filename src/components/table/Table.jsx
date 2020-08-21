@@ -77,7 +77,7 @@ class Table extends Component {
 
     return (
       <div className="row wow fadeIn">
-        <div className="col-md-12 mb-4">
+        <div className="col-md-12 mb-4 table-upoloads">
           <div className="card mb-4">
             <div className="card-header text-center ">
               Lista de Importações / Download de arquivos importados

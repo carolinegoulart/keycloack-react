@@ -122,7 +122,7 @@ class Upload extends Component {
 
   render() {
     return (
-      <div className="col-md-6 mb-4">
+      <div className="col-md-6 mb-4 upload-download-box">
         {this.state.modal ? (
           <Modal
             modal={this.state.modal}
@@ -133,44 +133,45 @@ class Upload extends Component {
             subtitulo={this.state.subtitulo}
           />
         ) : null}
-        <div className="card mb-4">
+        <div className="card mb-4" id="upload-box">
           <div className="card-header text-center ">
-            Upload - Arquivos de pontos em CSV
+            Upload (Arquivos de pontos em CSV)
           </div>
-          <div className="row wow card-body">
-            <div className="col-md-1" />
-            <div className="custom-file col-md-7">
-              <input
-                type="file"
-                onChange={this.onChange}
-                className="custom-file-input"
-                id="customFileLang"
-                lang="pt-br"
-              />
-              <label className="custom-file-label" htmlFor="customFileLang">
-                {this.state.nameFile}
-              </label>
+
+          <div className="upload-area">
+            <div className="input-area">
+              <div className="custom-file col-md-7">
+                <input
+                  type="file"
+                  onChange={this.onChange}
+                  className="custom-file-input"
+                  id="customFileLang"
+                  lang="pt-br"
+                />
+                <label className="custom-file-label" htmlFor="customFileLang">
+                  {this.state.nameFile}
+                </label>
+              </div>
             </div>
 
-            <div className="row wow col-md-4">
-              <div className="col-md-6">
-                <button
-                  type="button"
-                  onClick={this.onFormSubmit}
-                  className="btn btn-primary "
-                >
-                  <i className="fas fa-cloud-upload-alt" />
-                </button>
-              </div>
-              <div className="col-md-5">
-                <button
-                  type="button"
-                  onClick={this.onClear}
-                  className="btn btn-red "
-                >
-                  <i className="fas fa-trash-alt" />
-                </button>
-              </div>
+            <div className="buttons-area">
+              <button
+                type="button"
+                onClick={this.onFormSubmit}
+                className="btn btn-primary "
+                id="upload-csv"
+              >
+                <i className="fas fa-cloud-upload-alt" />
+              </button>
+
+              <button
+                type="button"
+                onClick={this.onClear}
+                className="btn btn-red "
+                id="delete-csv"
+              >
+                <i className="fas fa-trash-alt" />
+              </button>
             </div>
           </div>
         </div>

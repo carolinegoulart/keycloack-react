@@ -1,3 +1,10 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -140,4 +147,196 @@ code {
   flex: 1 1 auto;
   min-height: 1px;
   padding: 0.75rem 1.25rem 1.25rem 1.25rem;
+}
+
+/* Upload e Download Boxes */
+.upload-download-box {
+  margin-bottom: 0.9rem !important;
+}
+
+/* Upload Box */
+.upload-area {
+  display: grid;
+  grid-template-columns: 0.6fr 0.4fr;
+  padding: 1.25rem;
+}
+
+.input-area {
+  min-width: 20rem;
+}
+
+.custom-file {
+  width: 100%;
+  display: block;
+}
+
+.custom-file-label {
+  width: 90%;
+  margin: 0 auto;
+  text-align: left;
+}
+
+/* Table Imports */
+.table-upoloads {
+  margin-bottom: 8rem !important;
+}
+
+/* Formulário */
+#page-register-campaign {
+  margin: 2rem;
+}
+
+#form-wrapper {
+  max-width: 32rem;
+  padding: 0;
+}
+
+.input-block {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.input-block label {
+  font-size: 0.95rem;
+}
+
+.input-block span {
+  font-size: 0.85rem;
+  color: #5f5f5f;
+}
+
+.input-block input {
+  width: 100%;
+  border: 1px solid #a3a3a3;
+  border-radius: 0.125rem;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.07), 0 2px 10px 0 rgba(0, 0, 0, 0.05);
+  padding: 0.3rem 0.8rem;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.input-block:last-child {
+  margin-bottom: 2rem;
+}
+
+.input-block input:focus {
+  outline: 0;
+  background-color: #f0f0f0;
+}
+
+div.input-date-area {
+  display: flex;
+}
+
+#form-wrapper div.error-msg {
+  color: red;
+  margin-bottom: 0.8rem;
+}
+
+div.success-msg {
+  margin-top: 3rem;
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+div.fail-msg {
+  color: red;
+  margin-top: 3rem;
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+.button-admin#send-form {
+  margin: 2rem auto 10rem auto !important;
+  width: 60%;
+  box-sizing: border-box;
+}
+
+#clean-start-date-input,
+#clean-deadline-input {
+  font-size: 1rem;
+  font-weight: 300;
+  background: none;
+  color: rgb(23, 58, 172);
+  border: 0;
+  margin-left: 1rem;
+}
+
+#clean-start-date-input:focus,
+#clean-deadline-input:focus {
+  outline: 0;
+}
+
+#clean-start-date-input:hover,
+#clean-deadline-input:hover {
+  color: rgb(11, 26, 77);
+}
+
+.button-admin:hover {
+  background-color: #535353;
+}
+
+.button-wrapper {
+  width: 100%;
+  text-align: center;
+}
+
+/* Footer  */
+#footer-portal {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+/* Main */
+@media (max-width: 992px) {
+  #main-container {
+    margin: 0 1rem !important;
+  }
+}
+
+@media (max-width: 1293px) {
+  .upload-area {
+    display: grid;
+    grid-template-columns: none;
+    grid-template-rows: 0.5fr 0.5fr;
+    padding: 1.25rem;
+  }
+
+  .buttons-area {
+    display: flex;
+    flex: 1fr 1fr;
+    justify-content: center;
+    margin-top: 1.2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .custom-file {
+    max-width: 100%;
+    display: block;
+  }
+}
+
+@media (max-width: 500px) {
+  .buttons-admin-menu {
+    box-sizing: border-box;
+  }
+
+  .button-admin#register-campaign,
+  .button-admin#import-csv {
+    width: 90%;
+    margin: 0.6rem auto;
+    padding: 0.5rem 1.8rem;
+  }
+
+  .upload-area {
+    width: 100%;
+  }
+
+  .custom-file-label {
+    width: 80%;
+    margin: 0;
+  }
 }
