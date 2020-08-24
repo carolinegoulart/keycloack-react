@@ -228,8 +228,13 @@ div.input-date-area {
   display: flex;
 }
 
-#form-container div.error-msg {
+.error-msg {
   color: red;
+  margin-bottom: 0.8rem;
+}
+
+.loading-msg {
+  color: rgb(97, 97, 97);
   margin-bottom: 0.8rem;
 }
 

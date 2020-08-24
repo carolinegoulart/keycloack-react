@@ -12,6 +12,8 @@ const initialState = {
 
   partners: [],
   disabled_button: false,
+  disabled_select: true,
+  loading_message: 'Carregando parceiros...',
 
   partner_name_error: '',
   partner_code_error: '',
@@ -33,10 +35,12 @@ export default class Form extends Component {
         if (response.data.results) {
           this.setState({
             partners: response.data.results,
+            disabled_select: false,
           });
         } else {
           this.setState({
             partners: [],
+            disabled_select: false,
           });
         }
       });
@@ -233,17 +237,22 @@ export default class Form extends Component {
         >
           <div className="input-block" id="partner_name_container">
             <label htmlFor="partner_name">Nome do Parceiro</label>
-            <select
-              onChange={this.handleChangeSelectMenu}
-              value={this.state.partner_name}
-            >
-              <option value="select">Selecione</option>
-              {this.state.partners.map((partner) => (
-                <option key={partner.partnerName} value={partner.partnerName}>
-                  {partner.partnerName}
-                </option>
-              ))}
-            </select>
+
+            {this.state.disabled_select === false ? (
+              <select
+                onChange={this.handleChangeSelectMenu}
+                value={this.state.partner_name}
+              >
+                <option value="select">Selecione</option>
+                {this.state.partners.map((partner) => (
+                  <option key={partner.partnerName} value={partner.partnerName}>
+                    {partner.partnerName}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <div className="loading-msg">{this.state.loading_message}</div>
+            )}
           </div>
           <div className="error-msg">{this.state.partner_name_error}</div>
 
