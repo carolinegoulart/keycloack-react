@@ -6,7 +6,7 @@ export default class HomePage extends Component {
     return (
       <main className="pt-2 mx-lg-3" id="main-container">
         <div className="container-fluid mt-4">
-          <Importacao />
+          <Importacao isAdmin={this.props.isAdmin} />
         </div>
       </main>
     );

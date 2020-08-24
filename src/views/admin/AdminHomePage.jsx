@@ -117,12 +117,14 @@ export default class AdminHomePage extends Component {
             handleSendFormCampaignFail={this.handleSendFormCampaignFail}
           />
         ) : null}
-        {this.state.importVisible ? <HomePage /> : null}
         {this.state.formPartnerVisible ? (
           <FormPartner
             handleSendFormPartnerSuccess={this.handleSendFormPartnerSuccess}
             handleSendFormPartnerFail={this.handleSendFormPartnerFail}
           />
+        ) : null}
+        {this.state.importVisible ? (
+          <HomePage isAdmin={this.props.isAdmin} />
         ) : null}
         <div className="success-msg">{this.state.successMsg}</div>
         <div className="fail-msg">{this.state.failMsg}</div>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { post } from 'axios';
+import axios from 'axios';
 
 import { getListImport } from '../table/TableActions';
 import Modal from '../modal/Modal';
@@ -18,6 +19,13 @@ class Upload extends Component {
       subtitulo: '',
       codeError: '',
       tipo: '',
+
+      partners: [],
+      loading_message: 'Carregando parceiros...',
+
+      disabled_select: true,
+      disabled_select_campaign: true,
+      disabled_upload: true,
     };
 
     this.onFormSubmit = this.onFormSubmit.bind(this);
@@ -25,6 +33,28 @@ class Upload extends Component {
     this.fileUpload = this.fileUpload.bind(this);
     this.onClear = this.onClear.bind(this);
     this.onHiden = this.onHiden.bind(this);
+  }
+
+  componentDidMount() {
+    axios
+      .get(
+        'https://review-feature-mo-nmdn1g-test-api.esfera.site/portal-parceiro/v1/portal/api/partner'
+      )
+      .then((response) => {
+        if (response.data.results) {
+          this.setState({
+            partners: response.data.results,
+            disabled_select: false,
+            loading_message: false,
+          });
+        } else {
+          this.setState({
+            partners: [],
+            disabled_select: false,
+            loading_message: false,
+          });
+        }
+      });
   }
 
   onFormSubmit(e) {
@@ -122,7 +152,7 @@ class Upload extends Component {
 
   render() {
     return (
-      <div className="col-md-6 mb-4 upload-download-box">
+      <div className="col-md-6 mb-4" id="upload-box">
         {this.state.modal ? (
           <Modal
             modal={this.state.modal}
@@ -133,45 +163,96 @@ class Upload extends Component {
             subtitulo={this.state.subtitulo}
           />
         ) : null}
-        <div className="card mb-4" id="upload-box">
+
+        <div className="card mb-4 download-and-upload" id="upload-box">
           <div className="card-header text-center ">
             Upload (Arquivos de pontos em CSV)
           </div>
 
-          <div className="upload-area">
-            <div className="input-area">
-              <div className="custom-file col-md-7">
-                <input
-                  type="file"
-                  onChange={this.onChange}
-                  className="custom-file-input"
-                  id="customFileLang"
-                  lang="pt-br"
-                />
-                <label className="custom-file-label" htmlFor="customFileLang">
-                  {this.state.nameFile}
-                </label>
+          <div className="upload-wrapper">
+            {this.state.disabled_select === false ? (
+              <div className="input-block" id="select-container">
+                <div className="select-box" id="select-box-partner">
+                  <label>Parceiro</label>
+                  <select
+                    onChange={this.handleChangeSelectMenu}
+                    value={this.state.partner_name}
+                  >
+                    <option value="select">Selecione</option>
+                    {this.state.partners.map((partner) => (
+                      <option
+                        key={partner.partnerName}
+                        value={partner.partnerName}
+                      >
+                        {partner.partnerName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="select-box" id="select-box-campaign">
+                  <label>Campanha</label>
+                  <select
+                    onChange={this.handleChangeSelectMenu}
+                    value={this.state.partner_name}
+                  >
+                    <option value="select">Selecione</option>
+                    {this.state.partners.map((partner) => (
+                      <option
+                        key={partner.partnerName}
+                        value={partner.partnerName}
+                      >
+                        {partner.partnerName}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="loading-msg">
+                    {this.state.loading_message}
+                  </div>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="loading-msg">{this.state.loading_message}</div>
+            )}
 
-            <div className="buttons-area">
-              <button
-                type="button"
-                onClick={this.onFormSubmit}
-                className="btn btn-primary "
-                id="upload-csv"
-              >
-                <i className="fas fa-cloud-upload-alt" />
-              </button>
+            <div className="upload-area">
+              <div className="input-area">
+                <div className="custom-file col-md-7">
+                  <input
+                    type="file"
+                    onChange={this.onChange}
+                    className="custom-file-input"
+                    id="customFileLang"
+                    lang="pt-br"
+                    disabled={this.state.disabled_upload}
+                  />
+                  <label className="custom-file-label" htmlFor="customFileLang">
+                    {this.state.nameFile}
+                  </label>
+                </div>
+              </div>
 
-              <button
-                type="button"
-                onClick={this.onClear}
-                className="btn btn-red "
-                id="delete-csv"
-              >
-                <i className="fas fa-trash-alt" />
-              </button>
+              <div className="buttons-area">
+                <button
+                  type="button"
+                  onClick={this.onFormSubmit}
+                  className="btn btn-primary "
+                  id="upload-csv"
+                  disabled={this.state.disabled_upload}
+                >
+                  <i className="fas fa-cloud-upload-alt" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={this.onClear}
+                  className="btn btn-red "
+                  id="delete-csv"
+                  disabled={this.state.disabled_upload}
+                >
+                  <i className="fas fa-trash-alt" />
+                </button>
+              </div>
             </div>
           </div>
         </div>

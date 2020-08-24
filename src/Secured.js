@@ -47,6 +47,7 @@ class Secured extends Component {
           return (
             <div>
               <AdminHomePage
+                isAdmin={this.state.isAdmin}
                 keycloak={this.state.keycloak}
                 name={this.state.name}
                 email={this.state.email}
@@ -57,6 +58,7 @@ class Secured extends Component {
           return (
             <div>
               <UserImportView
+                idAdmin={this.state.isAdmin}
                 keycloak={this.state.keycloak}
                 name={this.state.name}
                 email={this.state.email}
