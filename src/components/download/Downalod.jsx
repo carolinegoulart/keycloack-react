@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { getFileModelo } from './DownloadAction';
+// import { getFileModelo } from './DownloadAction';
 
 export default () => {
   return (
@@ -17,7 +17,7 @@ export default () => {
           <button
             className="btn btn-default"
             id="download-csv"
-            onClick={getFileModelo}
+            // onClick={getFileModelo}
           >
             <i className="fas fa-cloud-download-alt ml-3" /> Modelo Arquivo CSV
           </button>

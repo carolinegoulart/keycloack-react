@@ -186,7 +186,7 @@ code {
   margin: 2rem;
 }
 
-#form-wrapper {
+#form-container {
   max-width: 32rem;
   padding: 0;
 }
@@ -228,7 +228,7 @@ div.input-date-area {
   display: flex;
 }
 
-#form-wrapper div.error-msg {
+#form-container div.error-msg {
   color: red;
   margin-bottom: 0.8rem;
 }
@@ -272,6 +272,26 @@ div.fail-msg {
   color: rgb(11, 26, 77);
 }
 
+input.hidden {
+  background: #dbdbdb;
+}
+
+.input-block#partner_name_container {
+  display: flex;
+  flex-direction: column;
+}
+
+select {
+  padding: 0.4rem;
+  width: 16rem;
+  font-size: 0.95rem;
+  color: #212529;
+}
+
+select:focus {
+  outline: 0;
+}
+
 .button-admin:hover {
   background-color: #535353;
 }
@@ -279,6 +299,10 @@ div.fail-msg {
 .button-wrapper {
   width: 100%;
   text-align: center;
+}
+
+.btn:disabled {
+  background-color: #a3a3a3;
 }
 
 /* Footer  */
@@ -320,15 +344,32 @@ div.fail-msg {
 }
 
 @media (max-width: 500px) {
+  .button-admin {
+    width: auto;
+    min-width: 16rem;
+    max-width: 16.5rem;
+    padding: 0.5rem 1.8rem;
+    box-sizing: border-box;
+  }
+
   .buttons-admin-menu {
     box-sizing: border-box;
+  }
+
+  .button-admin#register-partner {
+    margin: 0;
   }
 
   .button-admin#register-campaign,
   .button-admin#import-csv {
     width: 90%;
     margin: 0.6rem auto;
-    padding: 0.5rem 1.8rem;
+  }
+
+  .button#download-csv,
+  .button#download-manual {
+    margin: 0;
+    min-width: 16rem;
   }
 
   .upload-area {

@@ -30,8 +30,6 @@ class NavBar extends Component {
   };
 
   render() {
-    //ok
-    //console.log(this.props.name);
     return (
       <MDBNavbar color="colorBack" light expand="md">
         <MDBNavbarBrand>

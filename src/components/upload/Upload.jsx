@@ -39,7 +39,6 @@ class Upload extends Component {
         })
         .catch((error) => {
           this.onClear();
-          console.log(error);
           if (typeof error.response.data.results.userMessage === 'undefined') {
             this.setState({
               modal: true,
@@ -69,7 +68,8 @@ class Upload extends Component {
   }
 
   fileUpload(file) {
-    const BASE_URL = `${window.REACT_APP_URL}`;
+    const BASE_URL =
+      'https://review-feature-mo-nmdn1g-test-api.esfera.site/portal-parceiro/v1/portal/api';
     const formData = new FormData();
     formData.append('file', file);
     const config = {

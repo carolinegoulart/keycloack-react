@@ -23,7 +23,7 @@ class Table extends Component {
   }
 
   componentDidMount() {
-    this.props.getListImport();
+    // this.props.getListImport();
   }
 
   downloadArquivo(name) {}

@@ -10,7 +10,9 @@ const initialState = {
   start_date: '',
   deadline: '',
 
-  formVisible: true,
+  partners: [],
+  disabled_button: false,
+
   partner_name_error: '',
   partner_code_error: '',
   campaign_name_error: '',
@@ -21,6 +23,24 @@ const initialState = {
 
 export default class Form extends Component {
   state = initialState;
+
+  componentDidMount() {
+    axios
+      .get(
+        'https://review-feature-mo-nmdn1g-test-api.esfera.site/portal-parceiro/v1/portal/api/partner'
+      )
+      .then((response) => {
+        if (response.data.results) {
+          this.setState({
+            partners: response.data.results,
+          });
+        } else {
+          this.setState({
+            partners: [],
+          });
+        }
+      });
+  }
 
   validade = () => {
     let partner_name_error = '';
@@ -34,7 +54,7 @@ export default class Form extends Component {
       partner_name_error = 'Nome do parceiro inválido';
     }
 
-    if (!this.state.partner_code) {
+    if (!this.state.partner_code || this.state.partnerCode === 'select') {
       partner_code_error = 'Código do parceiro inválido';
     }
 
@@ -83,6 +103,14 @@ export default class Form extends Component {
     const isValid = this.validade();
 
     if (isValid) {
+      if (this.state.disabled_button) {
+        return;
+      }
+
+      this.setState({
+        disabled_button: true,
+      });
+
       event.preventDefault();
 
       const config = {
@@ -92,36 +120,51 @@ export default class Form extends Component {
       };
 
       const campaign = {
-        partner_name: this.state.partner_name,
-        partner_code: this.state.partner_code,
-        campaign_name: this.state.campaign_name,
-        campaign_code: this.state.campaign_code,
-        start_date: this.state.start_date,
+        partnerName: this.state.partner_name,
+        partnerCode: this.state.partner_code,
+        campaignName: this.state.campaign_name,
+        campaignCode: this.state.campaign_code,
+        startDate: this.state.start_date,
         deadline: this.state.deadline,
       };
 
       axios
-        .post('/portal/api/campaign', campaign, config)
+        .post(
+          'https://review-feature-mo-nmdn1g-test-api.esfera.site/portal-parceiro/v1/portal/api/campaign',
+          campaign,
+          config
+        )
         .then((response) => {
-          console.log('Data: ', this.state);
-          console.log('Response: ', response);
-
           this.setState(initialState);
-          document.getElementById('form-wrapper').reset();
-          this.setState({
-            formVisible: false,
-          });
-          this.props.handleFormCampaignSuccess();
+          document.getElementById('form-container').reset();
+          this.props.handleSendFormCampaignSuccess(
+            'Campanha cadastrada com sucesso!'
+          );
         })
         .catch((error) => {
-          console.log(error);
-
           this.setState(initialState);
-          document.getElementById('form-wrapper').reset();
-          this.setState({
-            formVisible: false,
-          });
-          this.props.handleFormCampaignFail();
+          document.getElementById('form-container').reset();
+
+          if (error.response) {
+            const httpStatusError = JSON.stringify(error.response.status);
+            if (httpStatusError === '400') {
+              this.props.handleSendFormCampaignFail(
+                'Erro: O código da campanha informado já consta no cadastro.'
+              );
+            } else if (httpStatusError === '404') {
+              this.props.handleSendFormCampaignFail(
+                'Erro: O código do parceiro informado não consta no cadastro.'
+              );
+            } else {
+              this.props.handleSendFormCampaignFail(
+                'Ocorreu um erro. Tente novamente.'
+              );
+            }
+          } else {
+            this.props.handleSendFormCampaignFail(
+              'Ocorreu um erro. Tente novamente.'
+            );
+          }
         });
     }
   };
@@ -160,111 +203,139 @@ export default class Form extends Component {
     document.getElementById('deadline').value = '';
   };
 
+  handleChangeSelectMenu = (event) => {
+    if (event.target.value === 'select') {
+      this.setState({
+        partner_code: '',
+        partner_name: '',
+      });
+    } else {
+      const partner_name_selected = event.target.value;
+      const partner_found = this.state.partners.filter((partner) => {
+        return partner.partnerName === partner_name_selected;
+      });
+      this.setState({
+        partner_code: partner_found[0].partnerCode,
+        partner_name: partner_name_selected,
+        partner_code_error: '',
+        partner_name_error: '',
+      });
+    }
+  };
+
   render() {
     return (
       <div id="page-register-campaign">
-        {this.state.formVisible ? (
-          <form
-            id="form-wrapper"
-            className="container"
-            onSubmit={this.handleSubmit.bind(this)}
-          >
-            <div className="input-block">
-              <label htmlFor="partner_name">Nome do Parceiro</label>
+        <form
+          id="form-container"
+          className="container"
+          onSubmit={this.handleSubmit.bind(this)}
+        >
+          <div className="input-block" id="partner_name_container">
+            <label htmlFor="partner_name">Nome do Parceiro</label>
+            <select
+              onChange={this.handleChangeSelectMenu}
+              value={this.state.partner_name}
+            >
+              <option value="select">Selecione</option>
+              {this.state.partners.map((partner) => (
+                <option key={partner.partnerName} value={partner.partnerName}>
+                  {partner.partnerName}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="error-msg">{this.state.partner_name_error}</div>
+
+          <div className="input-block">
+            <label htmlFor="partner_name">Código do Parceiro</label>
+            <input
+              className="hidden"
+              type="text"
+              id="partner_code"
+              name="partner_code"
+              value={this.state.partner_code}
+              readOnly={true}
+            />
+          </div>
+          <div className="error-msg">{this.state.partner_name_error}</div>
+
+          <div className="input-block">
+            <label htmlFor="campaign_code">Código da Campanha</label>
+            <span> (até 10 caracteres)</span>
+            <input
+              type="text"
+              id="campaign_code"
+              name="campaign_code"
+              onChange={this.handleTextInputChange}
+              maxLength="10"
+            />
+          </div>
+          <div className="error-msg">{this.state.campaign_code_error}</div>
+
+          <div className="input-block">
+            <label htmlFor="campaign_name">Nome da Campanha</label>
+            <span> (até 50 caracteres)</span>
+            <input
+              type="text"
+              id="campaign_name"
+              name="campaign_name"
+              onChange={this.handleTextInputChange}
+              maxLength="50"
+            />
+          </div>
+          <div className="error-msg">{this.state.campaign_name_error}</div>
+
+          <div className="input-block">
+            <label htmlFor="start_date">Data de Início</label>
+            <div className="input-date-area">
               <input
-                type="text"
-                id="partner_name"
-                name="partner_name"
-                onChange={this.handleTextInputChange}
+                type="date"
+                id="start_date"
+                name="start_date"
+                onChange={this.handleDateInputChange}
               />
-            </div>
-            <div className="error-msg">{this.state.partner_name_error}</div>
-
-            <div className="input-block">
-              <label htmlFor="partner_code">Código do Parceiro</label>
-              <span> (3 caracteres)</span>
-              <input
-                type="text"
-                id="partner_code"
-                name="partner_code"
-                onChange={this.handleTextInputChange}
-                maxLength="3"
-              />
-            </div>
-            <div className="error-msg">{this.state.partner_code_error}</div>
-
-            <div className="input-block">
-              <label htmlFor="campaign_name">Nome da Campanha</label>
-              <span> (até 50 caracteres)</span>
-              <input
-                type="text"
-                id="campaign_name"
-                name="campaign_name"
-                onChange={this.handleTextInputChange}
-                maxLength="50"
-              />
-            </div>
-            <div className="error-msg">{this.state.campaign_name_error}</div>
-
-            <div className="input-block">
-              <label htmlFor="campaign_code">Código da Campanha</label>
-              <span> (até 10 caracteres)</span>
-              <input
-                type="text"
-                id="campaign_code"
-                name="campaign_code"
-                onChange={this.handleTextInputChange}
-                maxLength="10"
-              />
-            </div>
-            <div className="error-msg">{this.state.campaign_code_error}</div>
-
-            <div className="input-block">
-              <label htmlFor="start_date">Data de Início</label>
-              <div className="input-date-area">
-                <input
-                  type="date"
-                  id="start_date"
-                  name="start_date"
-                  onChange={this.handleDateInputChange}
-                />
-                <button
-                  id="clean-start-date-input"
-                  onClick={this.cleanStartDateInput.bind(this)}
-                >
-                  Limpar
-                </button>
-              </div>
-            </div>
-            <div className="error-msg">{this.state.start_date_error}</div>
-
-            <div className="input-block">
-              <label htmlFor="deadline">Data de Fim</label>
-              <span> (Opcional)</span>
-              <div className="input-date-area">
-                <input
-                  type="date"
-                  id="deadline"
-                  name="deadline"
-                  onChange={this.handleDateInputChange}
-                />
-                <button
-                  id="clean-deadline-input"
-                  onClick={this.cleanDeadlineInput.bind(this)}
-                >
-                  Limpar
-                </button>
-              </div>
-            </div>
-            <div className="error-msg">{this.state.deadline_error}</div>
-
-            <div className="button-wrapper">
-              <button type="submit" className="button-admin" id="send-form">
-                Enviar
+              <button
+                id="clean-start-date-input"
+                onClick={this.cleanStartDateInput.bind(this)}
+              >
+                Limpar
               </button>
             </div>
-          </form>
-        ) : null}
+          </div>
+          <div className="error-msg">{this.state.start_date_error}</div>
+
+          <div className="input-block">
+            <label htmlFor="deadline">Data de Fim</label>
+            <span> (Opcional)</span>
+            <div className="input-date-area">
+              <input
+                type="date"
+                id="deadline"
+                name="deadline"
+                onChange={this.handleDateInputChange}
+              />
+              <button
+                id="clean-deadline-input"
+                onClick={this.cleanDeadlineInput.bind(this)}
+              >
+                Limpar
+              </button>
+            </div>
+          </div>
+          <div className="error-msg">{this.state.deadline_error}</div>
+
+          <div className="button-wrapper">
+            <button
+              type="submit"
+              className="button-admin"
+              id="send-form"
+              disabled={this.state.disabled_button}
+            >
+              {this.state.disabled_button ? 'Enviando...' : 'Enviar'}
+            </button>
+          </div>
+        </form>
       </div>
     );
   }

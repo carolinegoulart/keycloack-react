@@ -13,10 +13,16 @@ export default class AdminHomePage extends Component {
     this.handleFormClick = this.handleFormClick.bind(this);
     this.handleImportClick = this.handleImportClick.bind(this);
     this.handleFormPartnerClick = this.handleFormPartnerClick.bind(this);
-    this.handleFormCampaignSuccess = this.handleFormCampaignSuccess.bind(this);
-    this.handleFormCampaignFail = this.handleFormCampaignFail.bind(this);
-    this.handleFormPartnerSuccess = this.handleFormPartnerSuccess.bind(this);
-    this.handleFormPartnerFail = this.handleFormPartnerFail.bind(this);
+    this.handleSendFormCampaignSuccess = this.handleSendFormCampaignSuccess.bind(
+      this
+    );
+    this.handleSendFormCampaignFail = this.handleSendFormCampaignFail.bind(
+      this
+    );
+    this.handleSendFormPartnerSuccess = this.handleSendFormPartnerSuccess.bind(
+      this
+    );
+    this.handleSendFormPartnerFail = this.handleSendFormPartnerFail.bind(this);
     this.state = {
       formCampaignVisible: false,
       importVisible: false,
@@ -57,7 +63,7 @@ export default class AdminHomePage extends Component {
   }
 
   // Error message functions
-  handleFormCampaignSuccess(message) {
+  handleSendFormCampaignSuccess(message) {
     this.setState({
       successMsg: message,
       failMsg: '',
@@ -65,7 +71,7 @@ export default class AdminHomePage extends Component {
     });
   }
 
-  handleFormCampaignFail(message) {
+  handleSendFormCampaignFail(message) {
     this.setState({
       failMsg: message,
       successMsg: '',
@@ -73,17 +79,15 @@ export default class AdminHomePage extends Component {
     });
   }
 
-  handleFormPartnerSuccess(message) {
-    console.log(message);
+  handleSendFormPartnerSuccess(message) {
     this.setState({
       successMsg: message,
       failMsg: '',
       formPartnerVisible: false,
     });
-    console.log(this.state.successMsg);
   }
 
-  handleFormPartnerFail(message) {
+  handleSendFormPartnerFail(message) {
     this.setState({
       failMsg: message,
       successMsg: '',
@@ -109,15 +113,15 @@ export default class AdminHomePage extends Component {
         />
         {this.state.formCampaignVisible ? (
           <Form
-            handleFormCampaignSuccess={this.handleFormCampaignSuccess}
-            handleFormCampaignFail={this.handleFormCampaignFail}
+            handleSendFormCampaignSuccess={this.handleSendFormCampaignSuccess}
+            handleSendFormCampaignFail={this.handleSendFormCampaignFail}
           />
         ) : null}
         {this.state.importVisible ? <HomePage /> : null}
         {this.state.formPartnerVisible ? (
           <FormPartner
-            handleFormPartnerSuccess={this.handleFormPartnerSuccess}
-            handleFormPartnerFail={this.handleFormPartnerFail}
+            handleSendFormPartnerSuccess={this.handleSendFormPartnerSuccess}
+            handleSendFormPartnerFail={this.handleSendFormPartnerFail}
           />
         ) : null}
         <div className="success-msg">{this.state.successMsg}</div>

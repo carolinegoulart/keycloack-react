@@ -5,6 +5,8 @@ const initialState = {
   partner_name: '',
   partner_code: '',
 
+  disabled_button: false,
+
   partner_name_error: '',
   partner_code_error: '',
 };
@@ -24,6 +26,10 @@ export default class FormPartner extends Component {
       partner_code_error = 'Código do parceiro inválido';
     }
 
+    if (this.state.partner_code.length < 3) {
+      partner_code_error = 'O código do parceiro deve conter 3 caracteres';
+    }
+
     if (partner_name_error || partner_code_error) {
       this.setState({
         partner_name_error,
@@ -41,6 +47,14 @@ export default class FormPartner extends Component {
     if (isValid) {
       event.preventDefault();
 
+      if (this.state.disabled_button) {
+        return;
+      }
+
+      this.setState({
+        disabled_button: true,
+      });
+
       const config = {
         headers: {
           'content-type': 'application/json',
@@ -48,26 +62,35 @@ export default class FormPartner extends Component {
       };
 
       const partner = {
-        partner_name: this.state.partner_name,
-        partner_code: this.state.partner_code,
+        partnerName: this.state.partner_name,
+        partnerCode: this.state.partner_code,
       };
 
       axios
-        .post('/portal/api/partner', partner, config)
+        .post(
+          'https://review-feature-mo-nmdn1g-test-api.esfera.site/portal-parceiro/v1/portal/api/partner',
+          partner,
+          config
+        )
         .then((response) => {
           this.setState(initialState);
-          document.getElementById('form-wrapper').reset();
-          this.props.handleFormPartnerSuccess(
-            'Parceiro cadastrado com sucesso.'
+          document.getElementById('form-container').reset();
+          this.props.handleSendFormPartnerSuccess(
+            'Parceiro cadastrado com sucesso!'
           );
         })
         .catch((error) => {
           this.setState(initialState);
-          document.getElementById('form-wrapper').reset();
-          if (error.response) {
-            this.props.handleFormPartnerFail(error.response.data);
+          document.getElementById('form-container').reset();
+          if (
+            error.response &&
+            JSON.stringify(error.response.status) === '400'
+          ) {
+            this.props.handleSendFormPartnerFail(
+              'Erro: O código do parceiro informado já consta no cadastro.'
+            );
           } else {
-            this.props.handleFormPartnerFail(
+            this.props.handleSendFormPartnerFail(
               'Ocorreu um erro. Tente novamente.'
             );
           }
@@ -75,7 +98,7 @@ export default class FormPartner extends Component {
     }
   };
 
-  handleTextInputChange = (event) => {
+  handlePartnerNameInputChange = (event) => {
     event.preventDefault();
     this.setState({
       [event.target.name]: event.target.value,
@@ -84,11 +107,24 @@ export default class FormPartner extends Component {
     });
   };
 
+  handlePartnerCodeTextInputChange = (event) => {
+    event.preventDefault();
+    this.setState({
+      [event.target.name]: event.target.value,
+      successMsg: '',
+    });
+    if (event.target.value.length === 3) {
+      this.setState({
+        [event.target.name + '_error']: '',
+      });
+    }
+  };
+
   render() {
     return (
       <div id="page-register-campaign">
         <form
-          id="form-wrapper"
+          id="form-container"
           className="container"
           onSubmit={this.handleSubmit}
         >
@@ -98,7 +134,7 @@ export default class FormPartner extends Component {
               type="text"
               id="partner_name"
               name="partner_name"
-              onChange={this.handleTextInputChange}
+              onChange={this.handlePartnerNameInputChange}
             />
           </div>
           <div className="error-msg">{this.state.partner_name_error}</div>
@@ -110,15 +146,19 @@ export default class FormPartner extends Component {
               type="text"
               id="partner_code"
               name="partner_code"
-              onChange={this.handleTextInputChange}
+              onChange={this.handlePartnerCodeTextInputChange}
               maxLength="3"
             />
           </div>
           <div className="error-msg">{this.state.partner_code_error}</div>
 
           <div className="button-wrapper">
-            <button className="button-admin" id="send-form">
-              Enviar
+            <button
+              className="button-admin"
+              id="send-form"
+              disabled={this.state.disabled_button}
+            >
+              {this.state.disabled_button ? 'Enviando...' : 'Enviar'}
             </button>
           </div>
         </form>
