@@ -28,13 +28,23 @@ export default class Form extends Component {
 
   componentDidMount() {
     axios
-      .get(
-        'https://review-feature-mo-nmdn1g-test-api.esfera.site/portal-parceiro/v1/portal/api/partner'
-      )
+      .get('https://test-api.esfera.site/portal-parceiro/v1/portal/api/partner')
       .then((response) => {
+        const partnersData = response.data.results;
+
+        partnersData.sort(function(a, b) {
+          if (a.partnerName < b.partnerName) {
+            return -1;
+          }
+          if (a.partnerName > b.partnerName) {
+            return 1;
+          }
+          return 0;
+        });
+
         if (response.data.results) {
           this.setState({
-            partners: response.data.results,
+            partners: partnersData,
             disabled_select: false,
           });
         } else {
@@ -134,7 +144,7 @@ export default class Form extends Component {
 
       axios
         .post(
-          'https://review-feature-mo-nmdn1g-test-api.esfera.site/portal-parceiro/v1/portal/api/campaign',
+          'https://test-api.esfera.site/portal-parceiro/v1/portal/api/campaign',
           campaign,
           config
         )

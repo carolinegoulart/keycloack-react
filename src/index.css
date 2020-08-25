@@ -192,18 +192,13 @@ code {
   margin: 0 auto 0.6rem auto;
 }
 
-/* #select-container {
-  display: flex;
-  width: 65%;
-  margin: 0 auto 1rem auto;
-} */
-
 #select-box-partner {
   justify-self: right;
 }
 
 #select-container label {
   margin-right: 0.3rem;
+  margin-bottom: 0;
 }
 
 #select-box-campaign label {
@@ -230,6 +225,11 @@ code {
   margin-bottom: 0.6rem;
 }
 
+.no-campaigns-msg {
+  color: rgb(97, 97, 97);
+  padding-left: 1rem;
+}
+
 /* Download Box */
 .card-body#download-body {
   display: flex;
@@ -239,7 +239,6 @@ code {
 
 button#download-csv,
 button#download-manual {
-  /* margin: 0.5rem 0; */
   width: 18rem;
 }
 

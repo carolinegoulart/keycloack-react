@@ -21,8 +21,16 @@ class Upload extends Component {
       tipo: '',
 
       partners: [],
-      loading_message: 'Carregando parceiros...',
 
+      partner: {},
+      partner_name: '',
+      partner_code: '',
+      campaign_name: '',
+      campaign_code: '',
+      partner_campaigns: [],
+
+      loading_message: 'Carregando parceiros...',
+      no_campaigns_message: false,
       disabled_select: true,
       disabled_select_campaign: true,
       disabled_upload: true,
@@ -37,13 +45,23 @@ class Upload extends Component {
 
   componentDidMount() {
     axios
-      .get(
-        'https://review-feature-mo-nmdn1g-test-api.esfera.site/portal-parceiro/v1/portal/api/partner'
-      )
+      .get('https://test-api.esfera.site/portal-parceiro/v1/portal/api/partner')
       .then((response) => {
+        const partnersData = response.data.results;
+
+        partnersData.sort(function(a, b) {
+          if (a.partnerName < b.partnerName) {
+            return -1;
+          }
+          if (a.partnerName > b.partnerName) {
+            return 1;
+          }
+          return 0;
+        });
+
         if (response.data.results) {
           this.setState({
-            partners: response.data.results,
+            partners: partnersData,
             disabled_select: false,
             loading_message: false,
           });
@@ -150,6 +168,69 @@ class Upload extends Component {
     });
   }
 
+  handleChangeSelectPartner = (event) => {
+    event.preventDefault();
+    if (event.target.value === 'select') {
+      this.setState({
+        partner_code: '',
+        partner_name: '',
+      });
+    } else {
+      const partner_name_selected = event.target.value;
+      const partner_array = this.state.partners.filter((partner) => {
+        return partner.partnerName === partner_name_selected;
+      });
+      const partner = partner_array[0];
+      this.setState({
+        partner: partner,
+        partner_code: partner.partnerCode,
+        partner_name: partner_name_selected,
+      });
+      if (partner.campaigns) {
+        partner.campaigns.sort(function(a, b) {
+          if (a.campaignName < b.campaignName) {
+            return -1;
+          }
+          if (a.campaignName > b.campaignName) {
+            return 1;
+          }
+          return 0;
+        });
+
+        this.setState({
+          partner_campaigns: partner.campaigns,
+          disabled_select_campaign: false,
+          no_campaigns_message: false,
+        });
+      } else {
+        this.setState({
+          no_campaigns_message: true,
+          disabled_select_campaign: true,
+        });
+      }
+    }
+  };
+
+  handleChangeSelectCampaign = (event) => {
+    event.preventDefault();
+    if (event.target.value === 'select') {
+      this.setState({
+        campaign_name: '',
+        campaign_code: '',
+      });
+    } else {
+      const campaign_name_selected = event.target.value;
+      const campaign_found = this.state.partner_campaigns.filter((campaign) => {
+        return campaign.campaignName === campaign_name_selected;
+      });
+      this.setState({
+        campaign_name: campaign_name_selected,
+        campaign_code: campaign_found[0].campaignCode,
+        disabled_upload: false,
+      });
+    }
+  };
+
   render() {
     return (
       <div className="col-md-6 mb-4" id="upload-box">
@@ -165,7 +246,7 @@ class Upload extends Component {
         ) : null}
 
         <div className="card mb-4 download-and-upload" id="upload-box">
-          <div className="card-header text-center ">
+          <div className="card-header text-center">
             Upload (Arquivos de pontos em CSV)
           </div>
 
@@ -175,7 +256,7 @@ class Upload extends Component {
                 <div className="select-box" id="select-box-partner">
                   <label>Parceiro</label>
                   <select
-                    onChange={this.handleChangeSelectMenu}
+                    onChange={this.handleChangeSelectPartner}
                     value={this.state.partner_name}
                   >
                     <option value="select">Selecione</option>
@@ -190,26 +271,30 @@ class Upload extends Component {
                   </select>
                 </div>
 
-                <div className="select-box" id="select-box-campaign">
-                  <label>Campanha</label>
-                  <select
-                    onChange={this.handleChangeSelectMenu}
-                    value={this.state.partner_name}
-                  >
-                    <option value="select">Selecione</option>
-                    {this.state.partners.map((partner) => (
-                      <option
-                        key={partner.partnerName}
-                        value={partner.partnerName}
-                      >
-                        {partner.partnerName}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="loading-msg">
-                    {this.state.loading_message}
+                {this.state.no_campaigns_message ? (
+                  <div className="no-campaigns-msg">
+                    Não há campanhas ativas para este parceiro.
                   </div>
-                </div>
+                ) : (
+                  <div className="select-box" id="select-box-campaign">
+                    <label>Campanha</label>
+                    <select
+                      onChange={this.handleChangeSelectCampaign}
+                      value={this.state.campaign_name}
+                      disabled={this.state.disabled_select_campaign}
+                    >
+                      <option value="select">Selecione</option>
+                      {this.state.partner_campaigns.map((campaign) => (
+                        <option
+                          key={campaign.campaignName}
+                          value={campaign.campaignName}
+                        >
+                          {campaign.campaignName}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="loading-msg">{this.state.loading_message}</div>
