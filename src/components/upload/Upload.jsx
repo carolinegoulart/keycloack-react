@@ -134,9 +134,24 @@ class Upload extends Component {
   }
 
   onChange(e) {
+    console.log("onchage");
     if (typeof e.target.files[0] != "undefined") {
       var retorno = this.getFileExtension(e.target.files[0].name);
       if (retorno === "csv") {
+        //
+        //
+        // var file = e.target.files[0];
+        // var reader = new FileReader();
+        // reader.onload = function(e) {
+        //   console.log("onload");
+        //   var textContent = e.target.result;
+        //   var allTextLines = textContent.split(/\r\n|\n/);
+        //   console.log(allTextLines);
+        // };
+        // reader.readAsText(file);
+        //
+        //
+
         this.setState({
           file: e.target.files[0],
           nameFile: e.target.files[0].name,
@@ -174,7 +189,10 @@ class Upload extends Component {
       this.setState({
         partner_code: "",
         partner_name: "",
-        no_campaigns_message: true,
+        campaign_name: "",
+        no_campaigns_message: false,
+        disabled_select_campaign: true,
+        disabled_upload: true,
       });
     } else {
       const partner_name_selected = event.target.value;
@@ -202,11 +220,13 @@ class Upload extends Component {
           partner_campaigns: partner.campaigns,
           disabled_select_campaign: false,
           no_campaigns_message: false,
+          campaign_name: "",
         });
       } else {
         this.setState({
           no_campaigns_message: true,
           disabled_select_campaign: true,
+          disabled_upload: true,
         });
       }
     }
@@ -218,6 +238,7 @@ class Upload extends Component {
       this.setState({
         campaign_name: "",
         campaign_code: "",
+        disabled_upload: true,
       });
     } else {
       const campaign_name_selected = event.target.value;
@@ -278,7 +299,11 @@ class Upload extends Component {
                   </div>
                 ) : (
                   <div className="select-box" id="select-box-campaign">
-                    <label>Campanha</label>
+                    {this.state.disabled_select_campaign ? (
+                      <label className="label-disabled">Campanha</label>
+                    ) : (
+                      <label>Campanha</label>
+                    )}
                     <select
                       onChange={this.handleChangeSelectCampaign}
                       value={this.state.campaign_name}

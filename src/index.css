@@ -7,8 +7,8 @@ body {
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -20,7 +20,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
@@ -219,6 +219,7 @@ code {
 .col-md-6#upload-box {
   flex: 0 0 60%;
   max-width: 60%;
+  margin-bottom: 0.7rem !important;
 }
 
 .upload-wrapper .loading-msg {
@@ -245,6 +246,7 @@ button#download-manual {
 .col-md-6#download-box {
   flex: 0 0 40%;
   max-width: 40%;
+  margin-bottom: 0.7rem !important;
 }
 
 /* Table Imports */
@@ -367,6 +369,15 @@ select:focus {
   outline: 0;
 }
 
+select:disabled {
+  background-color: #e9ecef;
+  color: #5a6066;
+}
+
+label.label-disabled {
+  color: #5a6066;
+}
+
 .button-admin:hover {
   background-color: #535353;
 }
@@ -389,11 +400,6 @@ select:focus {
 }
 
 /* Max */
-@media (max-width: 992px) {
-  #main-container {
-    margin: 0 1rem !important;
-  }
-}
 
 @media (max-width: 1263px) {
   .buttons-admin-menu button {
@@ -439,11 +445,53 @@ select:focus {
   }
 }
 
+@media (max-width: 992px) {
+  #main-container {
+    margin: 0 1rem !important;
+  }
+}
+
 @media (max-width: 780px) {
   .card-body#download-body {
     flex: 0;
     flex-direction: column !important;
     /* margin: 0 auto; */
+  }
+
+  #select-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #select-box-partner {
+    margin: 1rem auto 0.5rem auto;
+  }
+
+  #select-box-campaign {
+    margin: 0.5rem auto 0.5rem auto;
+  }
+
+  div.upload-area {
+    display: flex;
+    flex-direction: column;
+  }
+
+  div.buttons-area {
+    display: flex;
+    flex-direction: row;
+    margin: 1rem auto;
+  }
+
+  .custom-file-label {
+    width: 100%;
+  }
+
+  .input-area {
+    margin: 0 auto;
+  }
+
+  .buttons-area {
+    margin: 0 auto;
   }
 }
 
@@ -461,11 +509,6 @@ select:focus {
 
   .upload-area {
     width: 100%;
-  }
-
-  .custom-file-label {
-    width: 80%;
-    margin: 0;
   }
 }
 
