@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { post } from 'axios';
-import axios from 'axios';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { post } from "axios";
+import axios from "axios";
 
-import { getListImport } from '../table/TableActions';
-import Modal from '../modal/Modal';
+import { getListImport } from "../table/TableActions";
+import Modal from "../modal/Modal";
 
 class Upload extends Component {
   constructor(props) {
@@ -13,23 +13,23 @@ class Upload extends Component {
 
     this.state = {
       file: null,
-      nameFile: 'Selecione um arquivo CSV',
+      nameFile: "Selecione um arquivo CSV",
       modal: false,
-      titulo: '',
-      subtitulo: '',
-      codeError: '',
-      tipo: '',
+      titulo: "",
+      subtitulo: "",
+      codeError: "",
+      tipo: "",
 
       partners: [],
 
       partner: {},
-      partner_name: '',
-      partner_code: '',
-      campaign_name: '',
-      campaign_code: '',
+      partner_name: "",
+      partner_code: "",
+      campaign_name: "",
+      campaign_code: "",
       partner_campaigns: [],
 
-      loading_message: 'Carregando parceiros...',
+      loading_message: "Carregando parceiros...",
       no_campaigns_message: false,
       disabled_select: true,
       disabled_select_campaign: true,
@@ -45,7 +45,7 @@ class Upload extends Component {
 
   componentDidMount() {
     axios
-      .get('https://test-api.esfera.site/portal-parceiro/v1/portal/api/partner')
+      .get("https://test-api.esfera.site/portal-parceiro/v1/portal/api/partner")
       .then((response) => {
         const partnersData = response.data.results;
 
@@ -82,25 +82,25 @@ class Upload extends Component {
       this.fileUpload(this.state.file)
         .then((resp) => {
           this.onClear();
-          this.setState({ modal: true, tipo: 'sucesso' });
+          this.setState({ modal: true, tipo: "sucesso" });
           this.props.getListImport();
         })
         .catch((error) => {
           this.onClear();
-          if (typeof error.response.data.results.userMessage === 'undefined') {
+          if (typeof error.response.data.results.userMessage === "undefined") {
             this.setState({
               modal: true,
               titulo:
-                'Erro inesperado entre em contato com nossos canais de atendimento',
+                "Erro inesperado entre em contato com nossos canais de atendimento",
               codeError: error.response.data.results.code,
-              tipo: 'error',
+              tipo: "error",
             });
           } else {
             this.setState({
               modal: true,
               titulo: error.response.data.results.userMessage,
               codeError: error.response.data.results.code,
-              tipo: 'error',
+              tipo: "error",
             });
           }
         });
@@ -108,21 +108,21 @@ class Upload extends Component {
       this.onClear();
       this.setState({
         modal: true,
-        titulo: 'Selecione um arquivo csv para o envio!',
-        subtitulo: 'Favor baixar o arquivo csv de modelo.',
-        tipo: 'alerta',
+        titulo: "Selecione um arquivo csv para o envio!",
+        subtitulo: "Favor baixar o arquivo csv de modelo.",
+        tipo: "alerta",
       });
     }
   }
 
   fileUpload(file) {
     const BASE_URL =
-      'https://review-feature-mo-nmdn1g-test-api.esfera.site/portal-parceiro/v1/portal/api';
+      "https://review-feature-mo-nmdn1g-test-api.esfera.site/portal-parceiro/v1/portal/api";
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
     const config = {
       headers: {
-        'content-type': 'multipart/form-data',
+        "content-type": "multipart/form-data",
       },
     };
 
@@ -130,13 +130,13 @@ class Upload extends Component {
   }
 
   getFileExtension(filename) {
-    return filename.split('.').pop();
+    return filename.split(".").pop();
   }
 
   onChange(e) {
-    if (typeof e.target.files[0] != 'undefined') {
+    if (typeof e.target.files[0] != "undefined") {
       var retorno = this.getFileExtension(e.target.files[0].name);
-      if (retorno === 'csv') {
+      if (retorno === "csv") {
         this.setState({
           file: e.target.files[0],
           nameFile: e.target.files[0].name,
@@ -145,35 +145,36 @@ class Upload extends Component {
         this.onClear();
         this.setState({
           modal: true,
-          titulo: 'Permitido apenas arquivo CSV!',
-          subtitulo: 'Favor baixar o arquivo modelo.',
-          tipo: 'alerta',
+          titulo: "Permitido apenas arquivo CSV!",
+          subtitulo: "Favor baixar o arquivo modelo.",
+          tipo: "alerta",
         });
       }
     }
   }
 
   onClear() {
-    this.setState({ file: null, nameFile: 'Selecione um arquivo CSV' });
-    document.getElementById('customFileLang').value = '';
+    this.setState({ file: null, nameFile: "Selecione um arquivo CSV" });
+    document.getElementById("customFileLang").value = "";
   }
 
   onHiden() {
     this.setState({
       modal: false,
-      titulo: '',
-      subtitulo: '',
-      codeError: '',
-      tipo: '',
+      titulo: "",
+      subtitulo: "",
+      codeError: "",
+      tipo: "",
     });
   }
 
   handleChangeSelectPartner = (event) => {
     event.preventDefault();
-    if (event.target.value === 'select') {
+    if (event.target.value === "select") {
       this.setState({
-        partner_code: '',
-        partner_name: '',
+        partner_code: "",
+        partner_name: "",
+        no_campaigns_message: true,
       });
     } else {
       const partner_name_selected = event.target.value;
@@ -213,10 +214,10 @@ class Upload extends Component {
 
   handleChangeSelectCampaign = (event) => {
     event.preventDefault();
-    if (event.target.value === 'select') {
+    if (event.target.value === "select") {
       this.setState({
-        campaign_name: '',
-        campaign_code: '',
+        campaign_name: "",
+        campaign_code: "",
       });
     } else {
       const campaign_name_selected = event.target.value;

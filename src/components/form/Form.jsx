@@ -1,26 +1,26 @@
-import React, { Component } from 'react';
-import { parseISO, isBefore } from 'date-fns';
-import axios from 'axios';
+import React, { Component } from "react";
+import { parseISO, isBefore } from "date-fns";
+import axios from "axios";
 
 const initialState = {
-  partner_name: '',
-  partner_code: '',
-  campaign_name: '',
-  campaign_code: '',
-  start_date: '',
-  deadline: '',
+  partner_name: "",
+  partner_code: "",
+  campaign_name: "",
+  campaign_code: "",
+  start_date: "",
+  deadline: "",
 
   partners: [],
   disabled_button: false,
   disabled_select: true,
-  loading_message: 'Carregando parceiros...',
+  loading_message: "Carregando parceiros...",
 
-  partner_name_error: '',
-  partner_code_error: '',
-  campaign_name_error: '',
-  campaign_code_error: '',
-  start_date_error: '',
-  deadline_error: '',
+  partner_name_error: "",
+  partner_code_error: "",
+  campaign_name_error: "",
+  campaign_code_error: "",
+  start_date_error: "",
+  deadline_error: "",
 };
 
 export default class Form extends Component {
@@ -28,7 +28,7 @@ export default class Form extends Component {
 
   componentDidMount() {
     axios
-      .get('https://test-api.esfera.site/portal-parceiro/v1/portal/api/partner')
+      .get("https://test-api.esfera.site/portal-parceiro/v1/portal/api/partner")
       .then((response) => {
         const partnersData = response.data.results;
 
@@ -57,37 +57,37 @@ export default class Form extends Component {
   }
 
   validade = () => {
-    let partner_name_error = '';
-    let partner_code_error = '';
-    let campaign_name_error = '';
-    let campaign_code_error = '';
-    let start_date_error = '';
-    let deadline_error = '';
+    let partner_name_error = "";
+    let partner_code_error = "";
+    let campaign_name_error = "";
+    let campaign_code_error = "";
+    let start_date_error = "";
+    let deadline_error = "";
 
     if (!this.state.partner_name) {
-      partner_name_error = 'Nome do parceiro inválido';
+      partner_name_error = "Nome do parceiro inválido";
     }
 
-    if (!this.state.partner_code || this.state.partnerCode === 'select') {
-      partner_code_error = 'Código do parceiro inválido';
+    if (!this.state.partner_code || this.state.partnerCode === "select") {
+      partner_code_error = "Código do parceiro inválido";
     }
 
     if (!this.state.campaign_name) {
-      campaign_name_error = 'Nome da campanha inválido';
+      campaign_name_error = "Nome da campanha inválido";
     }
 
     if (!this.state.campaign_code) {
-      campaign_code_error = 'Código da campanha inválido';
+      campaign_code_error = "Código da campanha inválido";
     }
 
     if (!this.state.start_date) {
-      start_date_error = 'Data de início inválida';
+      start_date_error = "Data de início inválida";
     }
 
-    if (this.state.deadline !== '') {
+    if (this.state.deadline !== "") {
       var result = isBefore(this.state.deadline, this.state.start_date);
       if (result === true) {
-        deadline_error = 'Data final deve ser após a data inicial';
+        deadline_error = "Data final deve ser após a data inicial";
       }
     }
 
@@ -129,7 +129,7 @@ export default class Form extends Component {
 
       const config = {
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
         },
       };
 
@@ -144,39 +144,39 @@ export default class Form extends Component {
 
       axios
         .post(
-          'https://test-api.esfera.site/portal-parceiro/v1/portal/api/campaign',
+          "https://test-api.esfera.site/portal-parceiro/v1/portal/api/campaign",
           campaign,
           config
         )
         .then((response) => {
           this.setState(initialState);
-          document.getElementById('form-container').reset();
+          document.getElementById("form-container").reset();
           this.props.handleSendFormCampaignSuccess(
-            'Campanha cadastrada com sucesso!'
+            "Campanha cadastrada com sucesso!"
           );
         })
         .catch((error) => {
           this.setState(initialState);
-          document.getElementById('form-container').reset();
+          document.getElementById("form-container").reset();
 
           if (error.response) {
             const httpStatusError = JSON.stringify(error.response.status);
-            if (httpStatusError === '400') {
+            if (httpStatusError === "400") {
               this.props.handleSendFormCampaignFail(
-                'Erro: O código da campanha informado já consta no cadastro.'
+                "Erro: O código da campanha informado já consta no cadastro."
               );
-            } else if (httpStatusError === '404') {
+            } else if (httpStatusError === "404") {
               this.props.handleSendFormCampaignFail(
-                'Erro: O código do parceiro informado não consta no cadastro.'
+                "Erro: O código do parceiro informado não consta no cadastro."
               );
             } else {
               this.props.handleSendFormCampaignFail(
-                'Ocorreu um erro. Tente novamente.'
+                "Ocorreu um erro. Tente novamente."
               );
             }
           } else {
             this.props.handleSendFormCampaignFail(
-              'Ocorreu um erro. Tente novamente.'
+              "Ocorreu um erro. Tente novamente."
             );
           }
         });
@@ -187,8 +187,8 @@ export default class Form extends Component {
     event.preventDefault();
     this.setState({
       [event.target.name]: event.target.value,
-      [event.target.name + '_error']: '',
-      successMsg: '',
+      [event.target.name + "_error"]: "",
+      successMsg: "",
     });
   };
 
@@ -196,32 +196,32 @@ export default class Form extends Component {
     event.preventDefault();
     this.setState({
       [event.target.name]: parseISO(event.target.value),
-      [event.target.name + '_error']: '',
-      successMsg: '',
+      [event.target.name + "_error"]: "",
+      successMsg: "",
     });
   };
 
   cleanStartDateInput = (event) => {
     event.preventDefault();
     this.setState({
-      start_date: '',
+      start_date: "",
     });
-    document.getElementById('start_date').value = '';
+    document.getElementById("start_date").value = "";
   };
 
   cleanDeadlineInput = (event) => {
     event.preventDefault();
     this.setState({
-      deadline: '',
+      deadline: "",
     });
-    document.getElementById('deadline').value = '';
+    document.getElementById("deadline").value = "";
   };
 
   handleChangeSelectMenu = (event) => {
-    if (event.target.value === 'select') {
+    if (event.target.value === "select") {
       this.setState({
-        partner_code: '',
-        partner_name: '',
+        partner_code: "",
+        partner_name: "",
       });
     } else {
       const partner_name_selected = event.target.value;
@@ -231,8 +231,8 @@ export default class Form extends Component {
       this.setState({
         partner_code: partner_found[0].partnerCode,
         partner_name: partner_name_selected,
-        partner_code_error: '',
-        partner_name_error: '',
+        partner_code_error: "",
+        partner_name_error: "",
       });
     }
   };
@@ -280,19 +280,6 @@ export default class Form extends Component {
           <div className="error-msg">{this.state.partner_name_error}</div>
 
           <div className="input-block">
-            <label htmlFor="campaign_code">Código da Campanha</label>
-            <span> (até 10 caracteres)</span>
-            <input
-              type="text"
-              id="campaign_code"
-              name="campaign_code"
-              onChange={this.handleTextInputChange}
-              maxLength="10"
-            />
-          </div>
-          <div className="error-msg">{this.state.campaign_code_error}</div>
-
-          <div className="input-block">
             <label htmlFor="campaign_name">Nome da Campanha</label>
             <span> (até 50 caracteres)</span>
             <input
@@ -304,6 +291,19 @@ export default class Form extends Component {
             />
           </div>
           <div className="error-msg">{this.state.campaign_name_error}</div>
+
+          <div className="input-block">
+            <label htmlFor="campaign_code">Código da Campanha</label>
+            <span> (até 10 caracteres)</span>
+            <input
+              type="text"
+              id="campaign_code"
+              name="campaign_code"
+              onChange={this.handleTextInputChange}
+              maxLength="10"
+            />
+          </div>
+          <div className="error-msg">{this.state.campaign_code_error}</div>
 
           <div className="input-block">
             <label htmlFor="start_date">Data de Início</label>
@@ -351,7 +351,7 @@ export default class Form extends Component {
               id="send-form"
               disabled={this.state.disabled_button}
             >
-              {this.state.disabled_button ? 'Enviando...' : 'Enviar'}
+              {this.state.disabled_button ? "Enviando..." : "Enviar"}
             </button>
           </div>
         </form>

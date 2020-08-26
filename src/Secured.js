@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import Keycloak from 'keycloak-js';
+import React, { Component } from "react";
+import Keycloak from "keycloak-js";
 
-import UserImportView from './views/user/UserImportView';
-import AdminHomePage from './views/admin/AdminHomePage';
+import UserImportView from "./views/user/UserImportView";
+import AdminHomePage from "./views/admin/AdminHomePage";
 
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 class Secured extends Component {
   constructor(props) {
@@ -13,21 +13,25 @@ class Secured extends Component {
       keycloak: null,
       authenticated: false,
       isAdmin: false,
-      name: '',
-      email: '',
+      name: "",
+      email: "",
     };
   }
 
   componentDidMount() {
-    const keycloak = Keycloak('/keycloak.json');
+    const keycloak = Keycloak("/keycloak.json");
     keycloak
-      .init({ onLoad: 'login-required', checkLoginIframe: false })
+      .init({ onLoad: "login-required", checkLoginIframe: false })
       .then((authenticated) => {
         this.setState({ keycloak: keycloak, authenticated: authenticated });
 
         const decryptedToken = jwt.decode(keycloak.token);
 
-        if (decryptedToken.groups && decryptedToken.groups.includes('ADMIN')) {
+        if (
+          (decryptedToken.realm_access &&
+            decryptedToken.realm_access.roles.includes("ADMIN")) ||
+          decryptedToken.realm_access.roles.includes("admin")
+        ) {
           this.setState({ isAdmin: true });
         }
 
