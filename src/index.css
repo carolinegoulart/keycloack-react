@@ -209,6 +209,11 @@ code {
   margin-left: 1rem;
 }
 
+#select-container.alone {
+  display: unset;
+  margin-top: 0.6rem;
+}
+
 .select-box {
   display: flex;
   flex-direction: row;

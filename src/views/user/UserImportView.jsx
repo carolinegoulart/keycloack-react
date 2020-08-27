@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import NavBar from '../../components/navbar/NavBar';
-import Footer from '../../components/footer/Footer';
-import HomePage from '../../components/homePage/HomePage';
+import NavBar from "../../components/navbar/NavBar";
+import Footer from "../../components/footer/Footer";
+import HomePage from "../../components/homePage/HomePage";
 
 export default class UserImportView extends Component {
   render() {
@@ -13,7 +13,7 @@ export default class UserImportView extends Component {
           name={this.props.name}
           email={this.props.email}
         />
-        <HomePage />
+        <HomePage company={this.props.company} />
         <Footer />
       </div>
     );

@@ -7,7 +7,7 @@ import axios from "axios";
 import { getListImport } from "../table/TableActions";
 import Modal from "../modal/Modal";
 
-class Upload extends Component {
+class UploadAdmin extends Component {
   constructor(props) {
     super(props);
 
@@ -19,6 +19,7 @@ class Upload extends Component {
       subtitulo: "",
       codeError: "",
       tipo: "",
+      parsedCsvFile: {},
 
       partners: [],
 
@@ -41,6 +42,11 @@ class Upload extends Component {
     this.fileUpload = this.fileUpload.bind(this);
     this.onClear = this.onClear.bind(this);
     this.onHiden = this.onHiden.bind(this);
+    this.getAsText = this.getAsText.bind(this);
+    this.fileReadingFinished = this.fileReadingFinished.bind(this);
+    this.processData = this.processData.bind(this);
+    this.updateCsvData = this.updateCsvData.bind(this);
+    this.generateNewCsvFile = this.generateNewCsvFile.bind(this);
   }
 
   componentDidMount() {
@@ -49,17 +55,17 @@ class Upload extends Component {
       .then((response) => {
         const partnersData = response.data.results;
 
-        partnersData.sort(function(a, b) {
-          if (a.partnerName < b.partnerName) {
-            return -1;
-          }
-          if (a.partnerName > b.partnerName) {
-            return 1;
-          }
-          return 0;
-        });
+        if (partnersData) {
+          partnersData.sort(function(a, b) {
+            if (a.partnerName < b.partnerName) {
+              return -1;
+            }
+            if (a.partnerName > b.partnerName) {
+              return 1;
+            }
+            return 0;
+          });
 
-        if (response.data.results) {
           this.setState({
             partners: partnersData,
             disabled_select: false,
@@ -79,40 +85,71 @@ class Upload extends Component {
     if (this.state.file != null) {
       e.preventDefault();
 
-      this.fileUpload(this.state.file)
-        .then((resp) => {
-          this.onClear();
-          this.setState({ modal: true, tipo: "sucesso" });
-          this.props.getListImport();
-        })
-        .catch((error) => {
-          this.onClear();
-          if (typeof error.response.data.results.userMessage === "undefined") {
-            this.setState({
-              modal: true,
-              titulo:
-                "Erro inesperado entre em contato com nossos canais de atendimento",
-              codeError: error.response.data.results.code,
-              tipo: "error",
-            });
-          } else {
-            this.setState({
-              modal: true,
-              titulo: error.response.data.results.userMessage,
-              codeError: error.response.data.results.code,
-              tipo: "error",
-            });
-          }
-        });
-    } else {
-      this.onClear();
-      this.setState({
-        modal: true,
-        titulo: "Selecione um arquivo csv para o envio!",
-        subtitulo: "Favor baixar o arquivo csv de modelo.",
-        tipo: "alerta",
-      });
+      this.updateCsvData();
+
+      this.generateNewCsvFile();
+
+      // OK: o arquivo enviado é o file, mas o conteúdo é o objeto parsedCsvFile
+      // console.log(this.state.parsedCsvFile);
+      // console.log(this.state.file);
+
+      //   this.fileUpload(this.state.file)
+      //     .then((resp) => {
+      //       this.onClear();
+      //       this.setState({ modal: true, tipo: "sucesso" });
+      //       this.props.getListImport();
+      //     })
+      //     .catch((error) => {
+      //       this.onClear();
+      //       if (typeof error.response.data.results.userMessage === "undefined") {
+      //         this.setState({
+      //           modal: true,
+      //           titulo:
+      //             "Erro inesperado entre em contato com nossos canais de atendimento",
+      //           codeError: error.response.data.results.code,
+      //           tipo: "error",
+      //         });
+      //       } else {
+      //         this.setState({
+      //           modal: true,
+      //           titulo: error.response.data.results.userMessage,
+      //           codeError: error.response.data.results.code,
+      //           tipo: "error",
+      //         });
+      //       }
+      //     });
+      // } else {
+      //   this.onClear();
+      //   this.setState({
+      //     modal: true,
+      //     titulo: "Selecione um arquivo csv para o envio!",
+      //     subtitulo: "Favor baixar o arquivo csv de modelo.",
+      //     tipo: "alerta",
+      //   });
     }
+  }
+
+  updateCsvData() {
+    const csvObject = this.state.parsedCsvFile;
+    csvObject["Campaign Name"] = this.state.campaign_name;
+    csvObject["Campaign Code"] = this.state.campaign_code;
+    this.setState({
+      parsedCsvFile: csvObject,
+    });
+  }
+
+  generateNewCsvFile() {
+    const object = this.state.parsedCsvFile;
+    const rows = [Object.keys(object), Object.values(object)];
+
+    let csvContent =
+      "data:text/csv;charset=utf-8," + rows.map((e) => e.join(";")).join("\n");
+
+    var newFile = encodeURI(csvContent);
+
+    this.setState({
+      file: newFile,
+    });
   }
 
   fileUpload(file) {
@@ -134,28 +171,15 @@ class Upload extends Component {
   }
 
   onChange(e) {
-    console.log("onchage");
     if (typeof e.target.files[0] != "undefined") {
-      var retorno = this.getFileExtension(e.target.files[0].name);
-      if (retorno === "csv") {
-        //
-        //
-        // var file = e.target.files[0];
-        // var reader = new FileReader();
-        // reader.onload = function(e) {
-        //   console.log("onload");
-        //   var textContent = e.target.result;
-        //   var allTextLines = textContent.split(/\r\n|\n/);
-        //   console.log(allTextLines);
-        // };
-        // reader.readAsText(file);
-        //
-        //
+      const retorno = this.getFileExtension(e.target.files[0].name);
 
+      if (retorno === "csv") {
         this.setState({
           file: e.target.files[0],
           nameFile: e.target.files[0].name,
         });
+        this.getAsText(e.target.files[0]);
       } else {
         this.onClear();
         this.setState({
@@ -166,6 +190,32 @@ class Upload extends Component {
         });
       }
     }
+  }
+
+  getAsText(rawFile) {
+    const reader = new FileReader();
+    reader.readAsText(rawFile);
+    reader.onload = this.fileReadingFinished;
+  }
+
+  fileReadingFinished(e) {
+    var csv = e.target.result;
+    this.processData(csv);
+  }
+
+  processData(csv) {
+    const allTextLines = csv.split(/\r\n|\n/);
+    const col_names = allTextLines[0].split(";");
+    const col_data = allTextLines[1].split(";");
+
+    var object = {};
+    col_names.forEach((col_names, i) => {
+      object[col_names] = col_data[i];
+    });
+
+    this.setState({
+      parsedCsvFile: object,
+    });
   }
 
   onClear() {
@@ -284,7 +334,7 @@ class Upload extends Component {
                     <option value="select">Selecione</option>
                     {this.state.partners.map((partner) => (
                       <option
-                        key={partner.partnerName}
+                        key={partner.partnerCode}
                         value={partner.partnerName}
                       >
                         {partner.partnerName}
@@ -312,7 +362,7 @@ class Upload extends Component {
                       <option value="select">Selecione</option>
                       {this.state.partner_campaigns.map((campaign) => (
                         <option
-                          key={campaign.campaignName}
+                          key={campaign.campaignCode}
                           value={campaign.campaignName}
                         >
                           {campaign.campaignName}
@@ -378,4 +428,4 @@ const mapDispatchToProps = (dispatch) =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Upload);
+)(UploadAdmin);
