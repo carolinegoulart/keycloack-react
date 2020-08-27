@@ -56,11 +56,12 @@ class UploadUser extends Component {
       axios.get(URL).then((response) => {
         const partner = response.data.results;
 
-        this.setState({
-          partner: partner,
-          partner_name: partner.partnerName,
-          partner_code: partner.partnerCode,
-        });
+        !this.isCancelled &&
+          this.setState({
+            partner: partner,
+            partner_name: partner.partnerName,
+            partner_code: partner.partnerCode,
+          });
 
         if (partner.campaigns) {
           const campaigns = partner.campaigns;
@@ -73,20 +74,26 @@ class UploadUser extends Component {
             }
             return 0;
           });
-          this.setState({
-            partner_campaigns: campaigns,
-            disabled_select: false,
-            loading_message: false,
-          });
+          !this.isCancelled &&
+            this.setState({
+              partner_campaigns: campaigns,
+              disabled_select: false,
+              loading_message: false,
+            });
         } else {
-          this.setState({
-            partner_campaigns: [],
-            disabled_select: false,
-            loading_message: false,
-          });
+          !this.isCancelled &&
+            this.setState({
+              partner_campaigns: [],
+              disabled_select: false,
+              loading_message: false,
+            });
         }
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.isCancelled = true;
   }
 
   onFormSubmit(e) {

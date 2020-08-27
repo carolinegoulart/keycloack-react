@@ -257,7 +257,7 @@ export default class Form extends Component {
               >
                 <option value="select">Selecione</option>
                 {this.state.partners.map((partner) => (
-                  <option key={partner.partnerName} value={partner.partnerName}>
+                  <option key={partner.partnerCode} value={partner.partnerName}>
                     {partner.partnerName}
                   </option>
                 ))}

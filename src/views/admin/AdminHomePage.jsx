@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import NavBar from '../../components/navbar/NavBar';
-import OptionsMenu from '../../components/optionsMenu/OptionsMenu';
-import HomePage from '../../components/homePage/HomePage';
-import Footer from '../../components/footer/Footer';
-import Form from '../../components/form/Form';
-import FormPartner from '../../components/form/FormPartner';
+import NavBar from "../../components/navbar/NavBar";
+import OptionsMenu from "../../components/optionsMenu/OptionsMenu";
+import HomePage from "../../components/homePage/HomePage";
+import Footer from "../../components/footer/Footer";
+import Form from "../../components/form/Form";
+import FormPartner from "../../components/form/FormPartner";
 
 export default class AdminHomePage extends Component {
   constructor(props) {
@@ -27,9 +27,13 @@ export default class AdminHomePage extends Component {
       formCampaignVisible: false,
       importVisible: false,
       formPartnerVisible: false,
-      successMsg: '',
-      failMsg: '',
+      successMsg: "",
+      failMsg: "",
     };
+  }
+
+  componentWillUnmount() {
+    this.isCancelled = true;
   }
 
   handleFormClick() {
@@ -37,8 +41,8 @@ export default class AdminHomePage extends Component {
       formCampaignVisible: true,
       importVisible: false,
       formPartnerVisible: false,
-      successMsg: '',
-      failMsg: '',
+      successMsg: "",
+      failMsg: "",
     });
   }
 
@@ -47,8 +51,8 @@ export default class AdminHomePage extends Component {
       formCampaignVisible: false,
       importVisible: true,
       formPartnerVisible: false,
-      successMsg: '',
-      failMsg: '',
+      successMsg: "",
+      failMsg: "",
     });
   }
 
@@ -57,8 +61,8 @@ export default class AdminHomePage extends Component {
       formCampaignVisible: false,
       importVisible: false,
       formPartnerVisible: true,
-      successMsg: '',
-      failMsg: '',
+      successMsg: "",
+      failMsg: "",
     });
   }
 
@@ -66,7 +70,7 @@ export default class AdminHomePage extends Component {
   handleSendFormCampaignSuccess(message) {
     this.setState({
       successMsg: message,
-      failMsg: '',
+      failMsg: "",
       formCampaignVisible: false,
     });
   }
@@ -74,7 +78,7 @@ export default class AdminHomePage extends Component {
   handleSendFormCampaignFail(message) {
     this.setState({
       failMsg: message,
-      successMsg: '',
+      successMsg: "",
       formCampaignVisible: false,
     });
   }
@@ -82,7 +86,7 @@ export default class AdminHomePage extends Component {
   handleSendFormPartnerSuccess(message) {
     this.setState({
       successMsg: message,
-      failMsg: '',
+      failMsg: "",
       formPartnerVisible: false,
     });
   }
@@ -90,7 +94,7 @@ export default class AdminHomePage extends Component {
   handleSendFormPartnerFail(message) {
     this.setState({
       failMsg: message,
-      successMsg: '',
+      successMsg: "",
       formPartnerVisible: false,
     });
   }
