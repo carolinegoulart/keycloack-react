@@ -14,6 +14,8 @@ export default class AdminHomeView extends Component {
     this.handlePartnerAreaClick = this.handlePartnerAreaClick.bind(this);
     this.handleCampaignAreaClick = this.handleCampaignAreaClick.bind(this);
     this.handleImportAreaClick = this.handleImportAreaClick.bind(this);
+    this.handleCreatePartnerClick = this.handleCreatePartnerClick.bind(this);
+
     this.state = {
       partnerAreaVisible: false,
       campaignAreaVisible: false,
@@ -42,6 +44,12 @@ export default class AdminHomeView extends Component {
       partnerAreaVisible: false,
       campaignAreaVisible: false,
       importAreaVisible: true,
+    });
+  }
+
+  handleCreatePartnerClick() {
+    this.setState({
+      partnerAreaVisible: true,
     });
   }
 

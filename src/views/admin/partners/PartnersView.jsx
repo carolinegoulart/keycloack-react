@@ -78,7 +78,9 @@ export default class PartnersView extends Component {
                 <button
                   id="create-new-partner"
                   className="button-admin"
-                  onClick={this.handleCreatePartnerClick}
+                  onClick={() => {
+                    this.handleCreatePartnerClick();
+                  }}
                 >
                   Cadastrar novo parceiro
                 </button>
@@ -87,11 +89,7 @@ export default class PartnersView extends Component {
           </div>
         ) : null}
 
-        {this.state.formPartnerVisible ? (
-          <FormPartner
-          // handleSendFormPartnerSuccess={this.handleSendFormPartnerSuccess}
-          />
-        ) : null}
+        {this.state.formPartnerVisible ? <FormPartner /> : null}
       </div>
     );
   }
