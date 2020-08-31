@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { getFileModelo } from '../download/DownloadAction';
+import { getFileModelo } from "../download/DownloadAction";
 
 export default class OptionsMenu extends Component {
   render() {
@@ -11,26 +11,26 @@ export default class OptionsMenu extends Component {
           <button
             className="button-admin"
             id="register-campaign"
-            onClick={() => this.props.showFormPartner()}
+            onClick={() => this.props.showPartnerArea()}
           >
-            Cadastrar novo parceiro
+            Parceiros
           </button>
           <button
             className="button-admin"
             id="register-partner"
-            onClick={() => this.props.showForm()}
+            onClick={() => this.props.showCampaignArea()}
           >
-            Cadastrar nova campanha
+            Campanhas
           </button>
           <button
             className="button-admin"
             id="import-csv"
             onClick={() => {
-              this.props.showImport();
+              this.props.showImportArea();
               getFileModelo();
             }}
           >
-            Importar CSV da campanha
+            Importar CSV
           </button>
         </div>
       </div>

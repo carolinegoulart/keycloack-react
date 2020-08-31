@@ -23,7 +23,7 @@ const initialState = {
   deadline_error: "",
 };
 
-export default class Form extends Component {
+export default class FormCampaign extends Component {
   state = initialState;
 
   componentDidMount() {
@@ -241,7 +241,7 @@ export default class Form extends Component {
 
   render() {
     return (
-      <div id="page-register-campaign">
+      <div id="page-wrapper">
         <form
           id="form-container"
           className="container"

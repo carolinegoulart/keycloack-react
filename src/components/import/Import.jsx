@@ -5,7 +5,7 @@ import UploadArquivoAdmin from "../../components/upload/UploadAdmin";
 import DownloadArquivo from "../../components/download/Downalod";
 import Table from "../../components/table/Table";
 
-export default class Importacao extends Component {
+export default class Import extends Component {
   constructor(props) {
     super(props);
 

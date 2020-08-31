@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import Keycloak from "keycloak-js";
 
-import UserImportView from "./views/user/UserImportView";
-import AdminHomePage from "./views/admin/AdminHomePage";
+import UserHomeView from "./views/user/home/UserHomeView";
+import AdminHomeView from "./views/admin/home/AdminHomeView";
 
 const jwt = require("jsonwebtoken");
 
@@ -56,7 +56,7 @@ class Secured extends Component {
         if (this.state.isAdmin) {
           return (
             <div>
-              <AdminHomePage
+              <AdminHomeView
                 isAdmin={this.state.isAdmin}
                 keycloak={this.state.keycloak}
                 name={this.state.name}
@@ -67,7 +67,7 @@ class Secured extends Component {
         } else {
           return (
             <div>
-              <UserImportView
+              <UserHomeView
                 idAdmin={this.state.isAdmin}
                 keycloak={this.state.keycloak}
                 name={this.state.name}

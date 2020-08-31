@@ -259,14 +259,39 @@ button#download-manual {
   margin-bottom: 8rem !important;
 }
 
+/* Views Partner and Form */
+#page-wrapper {
+  text-align: center;
+}
+
+#list-container {
+  max-width: 32rem;
+  padding: 0;
+  margin: 0 auto;
+}
+
+#list-container .loading-msg {
+  margin: 3rem 0 2rem 0;
+}
+
+.button-admin#create-new-partner {
+  margin-bottom: 8rem;
+}
+
+/* Table Partners */
+table#table-partners {
+  margin: 0 auto 2rem auto;
+}
+
 /* Formulário */
-#page-register-campaign {
+#page-wrapper {
   margin: 2rem;
 }
 
 #form-container {
   max-width: 32rem;
   padding: 0;
+  text-align: left;
 }
 
 .input-block {
@@ -409,6 +434,8 @@ label.label-disabled {
 @media (max-width: 1263px) {
   .buttons-admin-menu button {
     width: auto;
+    padding-right: 5rem;
+    padding-left: 5rem;
   }
 
   .download-and-upload {
@@ -514,6 +541,19 @@ label.label-disabled {
 
   .upload-area {
     width: 100%;
+  }
+
+  #select-container {
+    width: 100%;
+  }
+
+  #select-box-campaign,
+  #select-box-partner {
+    width: 100%;
+  }
+
+  .custom-file-label {
+    width: 90%;
   }
 }
 

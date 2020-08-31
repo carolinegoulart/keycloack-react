@@ -1,33 +1,33 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import axios from "axios";
 
 const initialState = {
-  partner_name: '',
-  partner_code: '',
+  partner_name: "",
+  partner_code: "",
 
   disabled_button: false,
 
-  partner_name_error: '',
-  partner_code_error: '',
+  partner_name_error: "",
+  partner_code_error: "",
 };
 
 export default class FormPartner extends Component {
   state = initialState;
 
   validade = () => {
-    let partner_name_error = '';
-    let partner_code_error = '';
+    let partner_name_error = "";
+    let partner_code_error = "";
 
     if (!this.state.partner_name) {
-      partner_name_error = 'Nome do parceiro inválido';
+      partner_name_error = "Nome do parceiro inválido";
     }
 
     if (!this.state.partner_code) {
-      partner_code_error = 'Código do parceiro inválido';
+      partner_code_error = "Código do parceiro inválido";
     }
 
     if (this.state.partner_code.length < 3) {
-      partner_code_error = 'O código do parceiro deve conter 3 caracteres';
+      partner_code_error = "O código do parceiro deve conter 3 caracteres";
     }
 
     if (partner_name_error || partner_code_error) {
@@ -57,7 +57,7 @@ export default class FormPartner extends Component {
 
       const config = {
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
         },
       };
 
@@ -68,30 +68,30 @@ export default class FormPartner extends Component {
 
       axios
         .post(
-          'https://test-api.esfera.site/portal-parceiro/v1/portal/api/partner',
+          "https://test-api.esfera.site/portal-parceiro/v1/portal/api/partner",
           partner,
           config
         )
         .then((response) => {
           this.setState(initialState);
-          document.getElementById('form-container').reset();
+          document.getElementById("form-container").reset();
           this.props.handleSendFormPartnerSuccess(
-            'Parceiro cadastrado com sucesso!'
+            "Parceiro cadastrado com sucesso!"
           );
         })
         .catch((error) => {
           this.setState(initialState);
-          document.getElementById('form-container').reset();
+          document.getElementById("form-container").reset();
           if (
             error.response &&
-            JSON.stringify(error.response.status) === '400'
+            JSON.stringify(error.response.status) === "400"
           ) {
             this.props.handleSendFormPartnerFail(
-              'Erro: O código do parceiro informado já consta no cadastro.'
+              "Erro: O código do parceiro informado já consta no cadastro."
             );
           } else {
             this.props.handleSendFormPartnerFail(
-              'Ocorreu um erro. Tente novamente.'
+              "Ocorreu um erro. Tente novamente."
             );
           }
         });
@@ -102,8 +102,8 @@ export default class FormPartner extends Component {
     event.preventDefault();
     this.setState({
       [event.target.name]: event.target.value,
-      [event.target.name + '_error']: '',
-      successMsg: '',
+      [event.target.name + "_error"]: "",
+      successMsg: "",
     });
   };
 
@@ -111,18 +111,18 @@ export default class FormPartner extends Component {
     event.preventDefault();
     this.setState({
       [event.target.name]: event.target.value,
-      successMsg: '',
+      successMsg: "",
     });
     if (event.target.value.length === 3) {
       this.setState({
-        [event.target.name + '_error']: '',
+        [event.target.name + "_error"]: "",
       });
     }
   };
 
   render() {
     return (
-      <div id="page-register-campaign">
+      <div id="page-wrapper">
         <form
           id="form-container"
           className="container"
@@ -158,7 +158,7 @@ export default class FormPartner extends Component {
               id="send-form"
               disabled={this.state.disabled_button}
             >
-              {this.state.disabled_button ? 'Enviando...' : 'Enviar'}
+              {this.state.disabled_button ? "Enviando..." : "Enviar"}
             </button>
           </div>
         </form>
