@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import axios from "axios";
 
+import FormCampaignEdit from "../form/FormCampaignEdit";
+
 export default class ListCampaigns extends Component {
   constructor(props) {
     super(props);
+
+    this.showEditCampaignForm = this.showEditCampaignForm.bind(this);
 
     this.state = {
       partners: [],
@@ -11,15 +15,20 @@ export default class ListCampaigns extends Component {
       partner_name: "",
       partner_campaigns: [],
 
+      selected_campaign: {},
+
+      editFormVisible: false,
       loadingPartners: true,
       partnerHasCampaigns: false,
       campaignsMessage: "",
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     axios
-      .get("https://test-api.esfera.site/portal-parceiro/v1/portal/api/partner")
+      .get(
+        "https://review-feature-mo-rr70i1-test-api.esfera.site/portal-parceiro/v1/portal/api/partner"
+      )
       .then((response) => {
         var partnersData = response.data.results;
 
@@ -36,9 +45,13 @@ export default class ListCampaigns extends Component {
         partnersData.forEach((partner) => {
           if (partner.campaigns) {
             partner.campaigns.forEach((campaign) => {
-              campaign.startDate = this.convertToDateFormat(campaign.startDate);
+              campaign.startDateBrlFormat = this.convertToDateFormat(
+                campaign.startDate
+              );
               if (campaign.deadline) {
-                campaign.deadline = this.convertToDateFormat(campaign.deadline);
+                campaign.deadlineBrlFormat = this.convertToDateFormat(
+                  campaign.deadline
+                );
               }
             });
             partner.campaigns.sort(function(a, b) {
@@ -109,77 +122,100 @@ export default class ListCampaigns extends Component {
     }
   };
 
+  showEditCampaignForm(campaign) {
+    this.setState({
+      editFormVisible: true,
+      selected_campaign: campaign,
+    });
+  }
+
   render() {
     return (
-      <div id="page-wrapper">
-        <div id="list-container">
-          {this.state.loadingPartners === true ? (
-            <div className="loading-msg">Carregando parceiros...</div>
-          ) : (
-            <div className="select-box">
+      <div>
+        {this.state.editFormVisible === false ? (
+          <div id="page-wrapper">
+            <div id="list-container">
               {this.state.loadingPartners === true ? (
                 <div className="loading-msg">Carregando parceiros...</div>
               ) : (
-                <div id="select-box-list-campaigns">
-                  <label>Selecione um parceiro</label>
-                  <select
-                    onChange={this.handleChangeSelectPartner}
-                    value={this.state.partner_name}
-                  >
-                    <option value="select">Selecione</option>
-                    {this.state.partners.map((partner) => (
-                      <option
-                        key={partner.partnerCode}
-                        value={partner.partnerName}
-                      >
-                        {partner.partnerName}
-                      </option>
-                    ))}
-                  </select>
-
-                  {this.state.partnerHasCampaigns === true ? (
-                    <div>
-                      <table className="table-list" id="table-campaigns">
-                        <thead>
-                          <tr>
-                            <th>Código</th>
-                            <th>Nome da Campanha</th>
-                            <th>Data de Início</th>
-                            <th>Data Final</th>
-                            <th>Ação</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {this.state.partner_campaigns.map((campaign) => {
-                            return (
-                              <tr key={campaign.campaignCode}>
-                                <td>{campaign.campaignCode}</td>
-                                <td>{campaign.campaignName}</td>
-                                <td>{campaign.startDate}</td>
-                                <td>{campaign.deadline || "Indefinido"}</td>
-                                <td>
-                                  <button class="button-edit">Editar</button>
-                                </td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
-                    </div>
+                <div className="select-box">
+                  {this.state.loadingPartners === true ? (
+                    <div className="loading-msg">Carregando parceiros...</div>
                   ) : (
-                    <div className="loading-msg">
-                      {this.state.campaignsMessage}
+                    <div id="select-box-list-campaigns">
+                      <label>Selecione um parceiro</label>
+                      <select
+                        onChange={this.handleChangeSelectPartner}
+                        value={this.state.partner_name}
+                      >
+                        <option value="select">Selecione</option>
+                        {this.state.partners.map((partner) => (
+                          <option
+                            key={partner.partnerCode}
+                            value={partner.partnerName}
+                          >
+                            {partner.partnerName}
+                          </option>
+                        ))}
+                      </select>
+
+                      {this.state.partnerHasCampaigns === true ? (
+                        <div>
+                          <table className="table-list" id="table-campaigns">
+                            <thead>
+                              <tr>
+                                <th>Código</th>
+                                <th>Nome da Campanha</th>
+                                <th>Data de Início</th>
+                                <th>Data Final</th>
+                                <th>Ação</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {this.state.partner_campaigns.map((campaign) => {
+                                return (
+                                  <tr key={campaign.campaignCode}>
+                                    <td>{campaign.campaignCode}</td>
+                                    <td>{campaign.campaignName}</td>
+                                    <td>{campaign.startDateBrlFormat}</td>
+                                    <td>
+                                      {campaign.deadlineBrlFormat ||
+                                        "Indefinido"}
+                                    </td>
+                                    <td>
+                                      <button
+                                        className="button-edit"
+                                        onClick={() =>
+                                          this.showEditCampaignForm(campaign)
+                                        }
+                                      >
+                                        Editar
+                                      </button>
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
+                      ) : (
+                        <div className="loading-msg">
+                          {this.state.campaignsMessage}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
               )}
-            </div>
-          )}
 
-          {this.partners === [] ? (
-            <div className="loading-msg">Não há parceiros cadastrados</div>
-          ) : null}
-        </div>
+              {this.partners === [] ? (
+                <div className="loading-msg">Não há parceiros cadastrados</div>
+              ) : null}
+            </div>
+          </div>
+        ) : (
+          <FormCampaignEdit campaign={this.state.selected_campaign} />
+        )}
       </div>
     );
   }

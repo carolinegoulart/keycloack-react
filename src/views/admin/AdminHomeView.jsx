@@ -24,18 +24,17 @@ export default class AdminHomeView extends Component {
 
     this.handleImportAreaClick = this.handleImportAreaClick.bind(this);
 
-    this.handleSendFormCampaignSuccess = this.handleSendFormCampaignSuccess.bind(
+    this.handleCreateCampaignSuccess = this.handleCreateCampaignSuccess.bind(
       this
     );
-    this.handleSendFormCampaignFail = this.handleSendFormCampaignFail.bind(
+    this.handleCreateCampaignFail = this.handleCreateCampaignFail.bind(this);
+    this.handleCreatePartnerSuccess = this.handleCreatePartnerSuccess.bind(
       this
     );
-    this.handleSendFormPartnerSuccess = this.handleSendFormPartnerSuccess.bind(
-      this
-    );
-    this.handleSendFormPartnerFail = this.handleSendFormPartnerFail.bind(this);
+    this.handleCreatePartnerFail = this.handleCreatePartnerFail.bind(this);
     this.hideAllOtherComponents = this.hideAllOtherComponents.bind(this);
     this.cleanMessages = this.cleanMessages.bind(this);
+    this.handleEditCampaignForm = this.handleEditCampaignForm.bind(this);
 
     this.state = {
       buttonsPartnerVisible: false,
@@ -49,7 +48,6 @@ export default class AdminHomeView extends Component {
       importAreaVisible: false,
 
       partners: [],
-
       successMsg: "",
       failMsg: "",
     };
@@ -168,7 +166,7 @@ export default class AdminHomeView extends Component {
   }
 
   // Error message functions
-  handleSendFormPartnerSuccess(message) {
+  handleCreatePartnerSuccess(message) {
     this.setState({
       successMsg: message,
       failMsg: "",
@@ -176,7 +174,7 @@ export default class AdminHomeView extends Component {
     this.hideAllOtherComponents();
   }
 
-  handleSendFormPartnerFail(message) {
+  handleCreatePartnerFail(message) {
     this.setState({
       failMsg: message,
       successMsg: "",
@@ -184,7 +182,7 @@ export default class AdminHomeView extends Component {
     this.hideAllOtherComponents();
   }
 
-  handleSendFormCampaignSuccess(message) {
+  handleCreateCampaignSuccess(message) {
     this.setState({
       successMsg: message,
       failMsg: "",
@@ -192,7 +190,7 @@ export default class AdminHomeView extends Component {
     this.hideAllOtherComponents();
   }
 
-  handleSendFormCampaignFail(message) {
+  handleCreateCampaignFail(message) {
     this.setState({
       failMsg: message,
       successMsg: "",
@@ -211,6 +209,9 @@ export default class AdminHomeView extends Component {
       importAreaVisible: false,
     });
   }
+
+  // Edit forms
+  handleEditCampaignForm() {}
 
   render() {
     return (
@@ -248,8 +249,8 @@ export default class AdminHomeView extends Component {
 
         {this.state.partnerFormVisible ? (
           <FormPartner
-            handleSendFormPartnerSuccess={this.handleSendFormPartnerSuccess}
-            handleSendFormPartnerFail={this.handleSendFormPartnerFail}
+            handleCreatePartnerSuccess={this.handleCreatePartnerSuccess}
+            handleCreatePartnerFail={this.handleCreatePartnerFail}
           />
         ) : null}
 
@@ -267,12 +268,14 @@ export default class AdminHomeView extends Component {
           </div>
         ) : null}
 
-        {this.state.campaignListVisible ? <ListCampaigns /> : null}
+        {this.state.campaignListVisible ? (
+          <ListCampaigns showEditCampaignForm={this.handleEditCampaignForm} />
+        ) : null}
 
         {this.state.campaignFormVisible ? (
           <FormCampaign
-            handleSendFormCampaignSuccess={this.handleSendFormCampaignSuccess}
-            handleSendFormCampaignFail={this.handleSendFormCampaignFail}
+            handleCreateCampaignSuccess={this.handleCreateCampaignSuccess}
+            handleCreateCampaignFail={this.handleCreateCampaignFail}
           />
         ) : null}
 

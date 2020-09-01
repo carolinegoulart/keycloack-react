@@ -7,80 +7,42 @@ const initialState = {
   partner_code: "",
   campaign_name: "",
   campaign_code: "",
-  start_date: "",
-  deadline: "",
 
-  partners: [],
+  start_date: {},
+  deadline: {},
+
+  start_date_br_format: "",
+  deadline_br_format: "",
+
   disabled_button: false,
   disabled_select: true,
   loading_message: "Carregando parceiros...",
 
-  partner_name_error: "",
-  partner_code_error: "",
-  campaign_name_error: "",
-  campaign_code_error: "",
   start_date_error: "",
   deadline_error: "",
 };
 
-export default class FormCampaign extends Component {
+export default class FormCampaignEdit extends Component {
   state = initialState;
 
   componentDidMount() {
-    axios
-      .get(
-        "https://review-feature-mo-rr70i1-test-api.esfera.site/portal-parceiro/v1/portal/api/partner"
-      )
-      .then((response) => {
-        const partnersData = response.data.results;
+    this.setState({
+      partner_name: this.props.campaign.partnerName,
+      partner_code: this.props.campaign.partnerCode,
+      campaign_name: this.props.campaign.campaignName,
+      campaign_code: this.props.campaign.campaignCode,
 
-        partnersData.sort(function(a, b) {
-          if (a.partnerName < b.partnerName) {
-            return -1;
-          }
-          if (a.partnerName > b.partnerName) {
-            return 1;
-          }
-          return 0;
-        });
+      start_date: parseISO(this.props.campaign.startDate),
+      deadline: parseISO(this.props.campaign.deadline),
 
-        if (response.data.results) {
-          this.setState({
-            partners: partnersData,
-            disabled_select: false,
-          });
-        } else {
-          this.setState({
-            partners: [],
-            disabled_select: false,
-          });
-        }
-      });
+      start_date_br_format: this.props.campaign.startDateBrlFormat,
+      deadline_br_format: this.props.campaign.deadlineBrlFormat,
+    });
   }
 
   validade = () => {
-    let partner_name_error = "";
-    let partner_code_error = "";
-    let campaign_name_error = "";
-    let campaign_code_error = "";
     let start_date_error = "";
     let deadline_error = "";
-
-    if (!this.state.partner_name) {
-      partner_name_error = "Nome do parceiro inválido";
-    }
-
-    if (!this.state.partner_code || this.state.partnerCode === "select") {
-      partner_code_error = "Código do parceiro inválido";
-    }
-
-    if (!this.state.campaign_name) {
-      campaign_name_error = "Nome da campanha inválido";
-    }
-
-    if (!this.state.campaign_code) {
-      campaign_code_error = "Código da campanha inválido";
-    }
 
     if (!this.state.start_date) {
       start_date_error = "Data de início inválida";
@@ -93,19 +55,8 @@ export default class FormCampaign extends Component {
       }
     }
 
-    if (
-      partner_name_error ||
-      partner_code_error ||
-      campaign_name_error ||
-      campaign_code_error ||
-      start_date_error ||
-      deadline_error
-    ) {
+    if (start_date_error || deadline_error) {
       this.setState({
-        partner_name_error,
-        partner_code_error,
-        campaign_name_error,
-        campaign_code_error,
         start_date_error,
         deadline_error,
       });
@@ -117,24 +68,20 @@ export default class FormCampaign extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     const isValid = this.validade();
-
     if (isValid) {
+      console.log(this.state);
       if (this.state.disabled_button) {
         return;
       }
-
       this.setState({
         disabled_button: true,
       });
-
       event.preventDefault();
-
       const config = {
         headers: {
           "content-type": "application/json",
         },
       };
-
       const campaign = {
         partnerName: this.state.partner_name,
         partnerCode: this.state.partner_code,
@@ -143,10 +90,9 @@ export default class FormCampaign extends Component {
         startDate: this.state.start_date,
         deadline: this.state.deadline,
       };
-
       axios
-        .post(
-          "https://review-feature-mo-rr70i1-test-api.esfera.site/portal-parceiro/v1/portal/api/campaign",
+        .put(
+          "https://review-feature-mo-rr70i1-test-api.esfera.site/portal-parceiro/v1/portal/api/partner/campaign",
           campaign,
           config
         )
@@ -160,10 +106,8 @@ export default class FormCampaign extends Component {
         .catch((error) => {
           this.setState(initialState);
           document.getElementById("form-container").reset();
-
           if (error.response) {
             console.log(error);
-
             const httpStatusError = JSON.stringify(error.response.status);
             if (httpStatusError === "400") {
               this.props.handleSendFormCampaignFail(
@@ -187,28 +131,11 @@ export default class FormCampaign extends Component {
     }
   };
 
-  handleTextInputChange = (event) => {
-    event.preventDefault();
-    this.setState({
-      [event.target.name]: event.target.value,
-      [event.target.name + "_error"]: "",
-      successMsg: "",
-    });
-  };
-
-  handleDateInputChange = (event) => {
-    event.preventDefault();
-    this.setState({
-      [event.target.name]: parseISO(event.target.value),
-      [event.target.name + "_error"]: "",
-      successMsg: "",
-    });
-  };
-
   cleanStartDateInput = (event) => {
     event.preventDefault();
     this.setState({
-      start_date: "",
+      start_date: {},
+      start_date_br_format: "",
     });
     document.getElementById("start_date").value = "";
   };
@@ -216,30 +143,47 @@ export default class FormCampaign extends Component {
   cleanDeadlineInput = (event) => {
     event.preventDefault();
     this.setState({
-      deadline: "",
+      deadline: {},
+      deadline_br_format: "",
     });
     document.getElementById("deadline").value = "";
   };
 
-  handleChangeSelectMenu = (event) => {
-    if (event.target.value === "select") {
-      this.setState({
-        partner_code: "",
-        partner_name: "",
-      });
-    } else {
-      const partner_name_selected = event.target.value;
-      const partner_found = this.state.partners.filter((partner) => {
-        return partner.partnerName === partner_name_selected;
-      });
-      this.setState({
-        partner_code: partner_found[0].partnerCode,
-        partner_name: partner_name_selected,
-        partner_code_error: "",
-        partner_name_error: "",
-      });
-    }
+  handleStartDateInputChange = (event) => {
+    event.preventDefault();
+    this.setState({
+      start_date: parseISO(event.target.value),
+      start_date_br_format: this.convertHtmlDateToBrlFormat(event.target.value),
+      start_date_error: "",
+    });
   };
+
+  handleDeadlineInputChange = (event) => {
+    event.preventDefault();
+    this.setState({
+      deadline: parseISO(event.target.value),
+      deadline_br_format: this.convertHtmlDateToBrlFormat(event.target.value),
+      deadline_error: "",
+    });
+  };
+
+  convertBrlDateToHtmlFormat(brlDate) {
+    // recebe 04/09/2020 - retorna 2020-09-04
+    if (brlDate.replace("/", "").length > 0) {
+      const day = brlDate.slice(0, 2);
+      const month = brlDate.slice(3, 5);
+      const year = brlDate.slice(6, 10);
+      return year.concat("-", month, "-", day);
+    }
+  }
+
+  convertHtmlDateToBrlFormat(htmlDate) {
+    // recebe 2020-09-04 - retorna 04/09/2020
+    const day = htmlDate.slice(8, 10);
+    const month = htmlDate.slice(5, 7);
+    const year = htmlDate.slice(0, 4);
+    return day.concat("/", month, "/", year);
+  }
 
   render() {
     return (
@@ -249,29 +193,20 @@ export default class FormCampaign extends Component {
           className="container"
           onSubmit={this.handleSubmit.bind(this)}
         >
-          <div className="input-block" id="partner_name_container">
+          <div className="input-block">
             <label htmlFor="partner_name">Nome do Parceiro</label>
-
-            {this.state.disabled_select === false ? (
-              <select
-                onChange={this.handleChangeSelectMenu}
-                value={this.state.partner_name}
-              >
-                <option value="select">Selecione</option>
-                {this.state.partners.map((partner) => (
-                  <option key={partner.partnerCode} value={partner.partnerName}>
-                    {partner.partnerName}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <div className="loading-msg">{this.state.loading_message}</div>
-            )}
+            <input
+              className="hidden"
+              type="text"
+              id="partner_code"
+              name="partner_code"
+              value={this.state.partner_name}
+              readOnly={true}
+            />
           </div>
-          <div className="error-msg">{this.state.partner_name_error}</div>
 
           <div className="input-block">
-            <label htmlFor="partner_name">Código do Parceiro</label>
+            <label htmlFor="partner_code">Código do Parceiro</label>
             <input
               className="hidden"
               type="text"
@@ -281,17 +216,17 @@ export default class FormCampaign extends Component {
               readOnly={true}
             />
           </div>
-          <div className="error-msg">{this.state.partner_name_error}</div>
 
           <div className="input-block">
             <label htmlFor="campaign_name">Nome da Campanha</label>
             <span> (até 50 caracteres)</span>
             <input
+              className="hidden"
+              readOnly={true}
               type="text"
               id="campaign_name"
               name="campaign_name"
-              onChange={this.handleTextInputChange}
-              maxLength="50"
+              value={this.state.campaign_name}
             />
           </div>
           <div className="error-msg">{this.state.campaign_name_error}</div>
@@ -300,11 +235,12 @@ export default class FormCampaign extends Component {
             <label htmlFor="campaign_code">Código da Campanha</label>
             <span> (até 10 caracteres)</span>
             <input
+              className="hidden"
+              readOnly={true}
               type="text"
               id="campaign_code"
               name="campaign_code"
-              onChange={this.handleTextInputChange}
-              maxLength="10"
+              value={this.state.campaign_code}
             />
           </div>
           <div className="error-msg">{this.state.campaign_code_error}</div>
@@ -316,11 +252,16 @@ export default class FormCampaign extends Component {
                 type="date"
                 id="start_date"
                 name="start_date"
-                onChange={this.handleDateInputChange}
+                onChange={this.handleStartDateInputChange}
+                value={
+                  this.convertBrlDateToHtmlFormat(
+                    this.state.start_date_br_format
+                  ) || ""
+                }
               />
               <button
                 id="clean-start-date-input"
-                onClick={this.cleanStartDateInput.bind(this)}
+                onClick={this.cleanStartDateInput}
               >
                 Limpar
               </button>
@@ -336,11 +277,16 @@ export default class FormCampaign extends Component {
                 type="date"
                 id="deadline"
                 name="deadline"
-                onChange={this.handleDateInputChange}
+                onChange={this.handleDeadlineInputChange}
+                value={
+                  this.convertBrlDateToHtmlFormat(
+                    this.state.deadline_br_format
+                  ) || ""
+                }
               />
               <button
                 id="clean-deadline-input"
-                onClick={this.cleanDeadlineInput.bind(this)}
+                onClick={this.cleanDeadlineInput}
               >
                 Limpar
               </button>

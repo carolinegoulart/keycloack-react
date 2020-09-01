@@ -14,7 +14,9 @@ export default class ListPartners extends Component {
 
   componentDidMount() {
     axios
-      .get("https://test-api.esfera.site/portal-parceiro/v1/portal/api/partner")
+      .get(
+        "https://review-feature-mo-rr70i1-test-api.esfera.site/portal-parceiro/v1/portal/api/partner"
+      )
       .then((response) => {
         var partnersData = response.data.results;
 

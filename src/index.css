@@ -390,6 +390,7 @@ table#table-campaigns {
   font-weight: 300;
   margin: 0 !important;
   padding: 0 !important;
+  color: rgb(9, 9, 172);
 }
 
 /* Form */
@@ -434,6 +435,14 @@ table#table-campaigns {
 .input-block input:focus {
   outline: 0;
   background-color: #f0f0f0;
+}
+
+input.hidden {
+  background: #dbdbdb;
+}
+
+input.hidden:focus {
+  background-color: #dbdbdb;
 }
 
 div.input-date-area {
