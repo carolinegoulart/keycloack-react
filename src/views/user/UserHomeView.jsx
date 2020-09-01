@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 
-import NavBar from "../../../components/navbar/NavBar";
-import Footer from "../../../components/footer/Footer";
-import ImportView from "../../../views/import/ImportView";
+import NavBar from "../../components/navbar/NavBar";
+import Footer from "../../components/footer/Footer";
+import ImportView from "../../views/import/ImportView";
 
 export default class UserHomeView extends Component {
   render() {

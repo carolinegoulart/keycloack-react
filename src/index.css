@@ -76,7 +76,6 @@ code {
 }
 
 /* Admin Menu */
-
 .button-admin {
   cursor: pointer;
   color: #fff;
@@ -265,7 +264,7 @@ button#download-manual {
 }
 
 #list-container {
-  max-width: 32rem;
+  max-width: 46rem;
   padding: 0;
   margin: 0 auto;
 }
@@ -278,12 +277,122 @@ button#download-manual {
   margin-bottom: 8rem;
 }
 
-/* Table Partners */
-table#table-partners {
+/* Buttons Partner/Campaign */
+div#page-buttons {
+  margin: 2rem;
+}
+
+div#list-container {
+  margin: 0 auto;
+}
+
+div#list-container {
+  display: flex;
+  flex-direction: column;
+}
+
+div#list-container button {
+  border: 0;
+  background-color: unset;
+  text-align: center;
+  padding: 0.8rem 1rem;
+  font-weight: 300;
+  font-size: 1.2rem;
+}
+
+div#list-container button:first-child {
+  margin: 1rem 0;
+}
+
+div#list-container button:hover {
+  background-color: whitesmoke;
+}
+
+div#list-container button:focus {
+  outline: unset;
+}
+
+div#list-container {
+  margin-bottom: 8rem;
+}
+
+table.table-list {
   margin: 0 auto 2rem auto;
 }
 
-/* Formulário */
+table.table-list thead th {
+  font-size: 1rem;
+  text-align: center;
+  padding-bottom: 0.5rem;
+}
+
+table.table-list thead tr th,
+table.table-list tbody tr td {
+  padding-left: 2rem;
+}
+
+table.table-list thead tr th + th,
+table.table-list tbody tr td + td {
+  padding-right: 1rem;
+}
+
+table.table-list tbody td {
+  text-align: center;
+}
+
+table.table-list tbody tr:hover {
+  background-color: whitesmoke;
+}
+
+#list-container .select-box {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Table Partners */
+
+/* Table Campaigns */
+#select-box-list-campaigns {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#select-box-list-campaigns label {
+  margin-bottom: 0.8rem;
+}
+
+#select-box-list-campaigns select {
+  margin: 0 auto;
+}
+
+#table-campaigns {
+  margin-top: 2rem;
+}
+
+table#table-campaigns {
+  table-layout: auto;
+  width: 100%;
+}
+
+#table-campaigns thead tr th + th,
+#table-campaigns tbody tr td + td {
+  padding-left: 1.6rem;
+}
+
+#table-campaigns thead tr th:last-child,
+#table-campaigns tbody tr td:last-child {
+  padding-right: 2rem;
+}
+
+#table-campaigns button.button-edit {
+  font-size: 0.9rem;
+  font-weight: 300;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Form */
 #page-wrapper {
   margin: 2rem;
 }
@@ -341,16 +450,16 @@ div.input-date-area {
 }
 
 div.success-msg {
-  margin-top: 3rem;
+  margin-top: 4rem;
   text-align: center;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
 }
 
 div.fail-msg {
   color: red;
-  margin-top: 3rem;
+  margin-top: 4rem;
   text-align: center;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
 }
 
 .button-admin#send-form {

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import Keycloak from "keycloak-js";
 
-import UserHomeView from "./views/user/home/UserHomeView";
-import AdminHomeView from "./views/admin/home/AdminHomeView";
+import UserHomeView from "./views/user/UserHomeView";
+import AdminHomeView from "./views/admin/AdminHomeView";
 
 const jwt = require("jsonwebtoken");
 
