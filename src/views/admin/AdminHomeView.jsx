@@ -34,7 +34,6 @@ export default class AdminHomeView extends Component {
     this.handleCreatePartnerFail = this.handleCreatePartnerFail.bind(this);
     this.hideAllOtherComponents = this.hideAllOtherComponents.bind(this);
     this.cleanMessages = this.cleanMessages.bind(this);
-    this.handleEditCampaignForm = this.handleEditCampaignForm.bind(this);
 
     this.state = {
       buttonsPartnerVisible: false,
@@ -244,15 +243,15 @@ export default class AdminHomeView extends Component {
 
         {this.state.partnerListVisible ? (
           <ListPartners
-            handleCreatePartnerSuccess={this.handleCreatePartnerSuccess}
-            handleCreatePartnerFail={this.handleCreatePartnerFail}
+            handleSendFormCampaignSuccess={this.handleCreatePartnerSuccess}
+            handleSendFormCampaignFail={this.handleCreatePartnerFail}
           />
         ) : null}
 
         {this.state.partnerFormVisible ? (
           <FormPartner
-            handleCreatePartnerSuccess={this.handleCreatePartnerSuccess}
-            handleCreatePartnerFail={this.handleCreatePartnerFail}
+            handleSendFormCampaignSuccess={this.handleCreatePartnerSuccess}
+            handleSendFormCampaignFail={this.handleCreatePartnerFail}
           />
         ) : null}
 
@@ -272,15 +271,15 @@ export default class AdminHomeView extends Component {
 
         {this.state.campaignListVisible ? (
           <ListCampaigns
-            handleCreateCampaignSuccess={this.handleCreateCampaignSuccess}
-            handleCreateCampaignFail={this.handleCreateCampaignFail}
+            handleSendFormCampaignSuccess={this.handleCreateCampaignSuccess}
+            handleSendFormCampaignFail={this.handleCreateCampaignFail}
           />
         ) : null}
 
         {this.state.campaignFormVisible ? (
           <FormCampaign
-            handleCreateCampaignSuccess={this.handleCreateCampaignSuccess}
-            handleCreateCampaignFail={this.handleCreateCampaignFail}
+            handleSendFormCampaignSuccess={this.handleCreateCampaignSuccess}
+            handleSendFormCampaignFail={this.handleCreateCampaignFail}
           />
         ) : null}
 

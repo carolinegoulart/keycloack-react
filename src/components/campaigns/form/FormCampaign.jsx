@@ -162,8 +162,6 @@ export default class FormCampaign extends Component {
           document.getElementById("form-container").reset();
 
           if (error.response) {
-            console.log(error);
-
             const httpStatusError = JSON.stringify(error.response.status);
             if (httpStatusError === "400") {
               this.props.handleSendFormCampaignFail(

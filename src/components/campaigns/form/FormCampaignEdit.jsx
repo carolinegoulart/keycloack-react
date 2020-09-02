@@ -103,31 +103,27 @@ export default class FormCampaignEdit extends Component {
         .then((response) => {
           this.setState(initialState);
           document.getElementById("form-container").reset();
-          this.props.handleCreateCampaignSuccess(
-            "Campanha cadastrada com sucesso!"
+          this.props.handleSendFormCampaignSuccess(
+            "Campanha atualizada com sucesso!"
           );
         })
         .catch((error) => {
-          console.log("error: ", error);
-
           this.setState(initialState);
           document.getElementById("form-container").reset();
 
           if (error.response) {
-            console.log("error.response: ", error.response);
-
             const httpStatusError = JSON.stringify(error.response.status);
             if (httpStatusError === "404") {
-              this.props.handleCreateCampaignFail(
+              this.props.handleSendFormCampaignFail(
                 "Erro: Parceiro ou campanha não encontrados."
               );
             } else {
-              this.props.handleCreateCampaignFail(
+              this.props.handleSendFormCampaignFail(
                 "Ocorreu um erro. Tente novamente."
               );
             }
           } else {
-            this.props.handleCreateCampaignFail(
+            this.props.handleSendFormCampaignFail(
               "Ocorreu um erro. Tente novamente."
             );
           }

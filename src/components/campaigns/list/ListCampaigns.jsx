@@ -6,7 +6,6 @@ import FormCampaignEdit from "../form/FormCampaignEdit";
 export default class ListCampaigns extends Component {
   constructor(props) {
     super(props);
-
     this.showEditCampaignForm = this.showEditCampaignForm.bind(this);
 
     this.state = {
@@ -216,8 +215,10 @@ export default class ListCampaigns extends Component {
         ) : (
           <FormCampaignEdit
             campaign={this.state.selected_campaign}
-            handleCreateCampaignSuccess={this.props.handleCreateCampaignSuccess}
-            handleCreateCampaignFail={this.props.handleCreateCampaignFail}
+            handleSendFormCampaignSuccess={
+              this.props.handleSendFormCampaignSuccess
+            }
+            handleSendFormCampaignFail={this.props.handleSendFormCampaignFail}
           />
         )}
       </div>
