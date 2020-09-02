@@ -241,17 +241,12 @@ export default class AdminHomeView extends Component {
           </div>
         ) : null}
 
-        {this.state.partnerListVisible ? (
-          <ListPartners
-            handleSendFormCampaignSuccess={this.handleCreatePartnerSuccess}
-            handleSendFormCampaignFail={this.handleCreatePartnerFail}
-          />
-        ) : null}
+        {this.state.partnerListVisible ? <ListPartners /> : null}
 
         {this.state.partnerFormVisible ? (
           <FormPartner
-            handleSendFormCampaignSuccess={this.handleCreatePartnerSuccess}
-            handleSendFormCampaignFail={this.handleCreatePartnerFail}
+            handleSendFormPartnerSuccess={this.handleCreatePartnerSuccess}
+            handleSendFormPartnerFail={this.handleCreatePartnerFail}
           />
         ) : null}
 

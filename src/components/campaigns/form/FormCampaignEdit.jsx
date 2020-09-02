@@ -94,6 +94,8 @@ export default class FormCampaignEdit extends Component {
         deadline: this.state.deadline || null,
       };
 
+      console.log(campaign);
+
       axios
         .put(
           "https://review-feature-mo-rr70i1-test-api.esfera.site/portal-parceiro/v1/portal/api/campaign",
@@ -134,7 +136,7 @@ export default class FormCampaignEdit extends Component {
   cleanStartDateInput = (event) => {
     event.preventDefault();
     this.setState({
-      start_date: {},
+      start_date: "",
       start_date_br_format: "",
     });
     document.getElementById("start_date").value = "";
@@ -143,7 +145,7 @@ export default class FormCampaignEdit extends Component {
   cleanDeadlineInput = (event) => {
     event.preventDefault();
     this.setState({
-      deadline: {},
+      deadline: "",
       deadline_br_format: "",
     });
     document.getElementById("deadline").value = "";
