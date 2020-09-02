@@ -8,8 +8,8 @@ const initialState = {
   campaign_name: "",
   campaign_code: "",
 
-  start_date: {},
-  deadline: {},
+  start_date: "",
+  deadline: "",
 
   start_date_br_format: "",
   deadline_br_format: "",
@@ -33,11 +33,14 @@ export default class FormCampaignEdit extends Component {
       campaign_code: this.props.campaign.campaignCode,
 
       start_date: parseISO(this.props.campaign.startDate),
-      deadline: parseISO(this.props.campaign.deadline),
-
       start_date_br_format: this.props.campaign.startDateBrlFormat,
-      deadline_br_format: this.props.campaign.deadlineBrlFormat,
     });
+    if (this.props.campaign.deadline) {
+      this.setState({
+        deadline: parseISO(this.props.campaign.deadline),
+        deadline_br_format: this.props.campaign.deadlineBrlFormat,
+      });
+    }
   }
 
   validade = () => {
@@ -69,7 +72,6 @@ export default class FormCampaignEdit extends Component {
     event.preventDefault();
     const isValid = this.validade();
     if (isValid) {
-      console.log(this.state);
       if (this.state.disabled_button) {
         return;
       }
@@ -82,48 +84,50 @@ export default class FormCampaignEdit extends Component {
           "content-type": "application/json",
         },
       };
+
       const campaign = {
         partnerName: this.state.partner_name,
         partnerCode: this.state.partner_code,
         campaignName: this.state.campaign_name,
         campaignCode: this.state.campaign_code,
         startDate: this.state.start_date,
-        deadline: this.state.deadline,
+        deadline: this.state.deadline || null,
       };
+
       axios
         .put(
-          "https://review-feature-mo-rr70i1-test-api.esfera.site/portal-parceiro/v1/portal/api/partner/campaign",
+          "https://review-feature-mo-rr70i1-test-api.esfera.site/portal-parceiro/v1/portal/api/campaign",
           campaign,
           config
         )
         .then((response) => {
           this.setState(initialState);
           document.getElementById("form-container").reset();
-          this.props.handleSendFormCampaignSuccess(
+          this.props.handleCreateCampaignSuccess(
             "Campanha cadastrada com sucesso!"
           );
         })
         .catch((error) => {
+          console.log("error: ", error);
+
           this.setState(initialState);
           document.getElementById("form-container").reset();
+
           if (error.response) {
-            console.log(error);
+            console.log("error.response: ", error.response);
+
             const httpStatusError = JSON.stringify(error.response.status);
-            if (httpStatusError === "400") {
-              this.props.handleSendFormCampaignFail(
-                "Erro: O código da campanha informado já consta no cadastro."
-              );
-            } else if (httpStatusError === "404") {
-              this.props.handleSendFormCampaignFail(
-                "Erro: O código do parceiro informado não consta no cadastro."
+            if (httpStatusError === "404") {
+              this.props.handleCreateCampaignFail(
+                "Erro: Parceiro ou campanha não encontrados."
               );
             } else {
-              this.props.handleSendFormCampaignFail(
+              this.props.handleCreateCampaignFail(
                 "Ocorreu um erro. Tente novamente."
               );
             }
           } else {
-            this.props.handleSendFormCampaignFail(
+            this.props.handleCreateCampaignFail(
               "Ocorreu um erro. Tente novamente."
             );
           }
@@ -168,7 +172,6 @@ export default class FormCampaignEdit extends Component {
   };
 
   convertBrlDateToHtmlFormat(brlDate) {
-    // recebe 04/09/2020 - retorna 2020-09-04
     if (brlDate.replace("/", "").length > 0) {
       const day = brlDate.slice(0, 2);
       const month = brlDate.slice(3, 5);
@@ -178,7 +181,6 @@ export default class FormCampaignEdit extends Component {
   }
 
   convertHtmlDateToBrlFormat(htmlDate) {
-    // recebe 2020-09-04 - retorna 04/09/2020
     const day = htmlDate.slice(8, 10);
     const month = htmlDate.slice(5, 7);
     const year = htmlDate.slice(0, 4);

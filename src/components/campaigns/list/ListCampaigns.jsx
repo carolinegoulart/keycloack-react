@@ -214,7 +214,11 @@ export default class ListCampaigns extends Component {
             </div>
           </div>
         ) : (
-          <FormCampaignEdit campaign={this.state.selected_campaign} />
+          <FormCampaignEdit
+            campaign={this.state.selected_campaign}
+            handleCreateCampaignSuccess={this.props.handleCreateCampaignSuccess}
+            handleCreateCampaignFail={this.props.handleCreateCampaignFail}
+          />
         )}
       </div>
     );

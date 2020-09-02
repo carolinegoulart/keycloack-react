@@ -210,9 +210,6 @@ export default class AdminHomeView extends Component {
     });
   }
 
-  // Edit forms
-  handleEditCampaignForm() {}
-
   render() {
     return (
       <div>
@@ -245,7 +242,12 @@ export default class AdminHomeView extends Component {
           </div>
         ) : null}
 
-        {this.state.partnerListVisible ? <ListPartners /> : null}
+        {this.state.partnerListVisible ? (
+          <ListPartners
+            handleCreatePartnerSuccess={this.handleCreatePartnerSuccess}
+            handleCreatePartnerFail={this.handleCreatePartnerFail}
+          />
+        ) : null}
 
         {this.state.partnerFormVisible ? (
           <FormPartner
@@ -269,7 +271,10 @@ export default class AdminHomeView extends Component {
         ) : null}
 
         {this.state.campaignListVisible ? (
-          <ListCampaigns showEditCampaignForm={this.handleEditCampaignForm} />
+          <ListCampaigns
+            handleCreateCampaignSuccess={this.handleCreateCampaignSuccess}
+            handleCreateCampaignFail={this.handleCreateCampaignFail}
+          />
         ) : null}
 
         {this.state.campaignFormVisible ? (
