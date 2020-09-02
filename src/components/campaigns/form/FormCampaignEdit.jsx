@@ -94,8 +94,6 @@ export default class FormCampaignEdit extends Component {
         deadline: this.state.deadline || null,
       };
 
-      console.log(campaign);
-
       axios
         .put(
           "https://review-feature-mo-rr70i1-test-api.esfera.site/portal-parceiro/v1/portal/api/campaign",
