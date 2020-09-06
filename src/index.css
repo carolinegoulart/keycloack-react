@@ -253,6 +253,14 @@ button#download-manual {
   margin-bottom: 0.7rem !important;
 }
 
+button#download-manual:disabled {
+  background-color: #4285f480;
+}
+
+button#download-csv:disabled {
+  background-color: #66c9bf78;
+}
+
 /* Table Imports */
 .table-upoloads {
   margin-bottom: 8rem !important;
@@ -348,8 +356,6 @@ table.table-list tbody tr:hover {
   display: flex;
   flex-direction: column;
 }
-
-/* Table Partners */
 
 /* Table Campaigns */
 #select-box-list-campaigns {
