@@ -68,7 +68,7 @@ export default class FormPartner extends Component {
 
       axios
         .post(
-          "https://review-feature-mo-rr70i1-test-api.esfera.site/portal-parceiro/v1/portal/api/partner",
+          "https://test-api.esfera.site/portal-parceiro/v1/portal/api/partner",
           partner,
           config
         )

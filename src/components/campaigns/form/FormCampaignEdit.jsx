@@ -96,7 +96,7 @@ export default class FormCampaignEdit extends Component {
 
       axios
         .put(
-          "https://review-feature-mo-rr70i1-test-api.esfera.site/portal-parceiro/v1/portal/api/campaign",
+          "https://test-api.esfera.site/portal-parceiro/v1/portal/api/campaign",
           campaign,
           config
         )

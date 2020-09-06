@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { MDBDataTable } from 'mdbreact';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { MDBDataTable } from "mdbreact";
 
-import { getListImport } from './TableActions';
-import { getFileImport } from '../download/DownloadAction';
+import getListImport from "./TableActions";
+import getFileImport from "../download/DownloadAction";
 
 class Table extends Component {
   constructor(props) {
@@ -13,10 +13,10 @@ class Table extends Component {
     this.state = {
       imports: [],
       modal: false,
-      titulo: '',
-      subtitulo: '',
-      codeError: '',
-      tipo: '',
+      titulo: "",
+      subtitulo: "",
+      codeError: "",
+      tipo: "",
     };
 
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -32,27 +32,27 @@ class Table extends Component {
     const data = {
       columns: [
         {
-          label: 'Nome',
-          field: 'namePartner',
-          sort: 'asc',
+          label: "Nome",
+          field: "namePartner",
+          sort: "asc",
           width: 150,
         },
         {
-          label: 'Nome Arquivo',
-          field: 'nameFile',
-          sort: 'asc',
+          label: "Nome Arquivo",
+          field: "nameFile",
+          sort: "asc",
           width: 270,
         },
         {
-          label: 'Data Importação',
-          field: 'dateImport',
-          sort: 'asc',
+          label: "Data Importação",
+          field: "dateImport",
+          sort: "asc",
           width: 200,
         },
         {
-          label: 'Downalod',
-          field: 'download',
-          sort: 'asc',
+          label: "Download",
+          field: "download",
+          sort: "asc",
           width: 100,
         },
       ],
@@ -88,10 +88,10 @@ class Table extends Component {
                 scrollY={true}
                 fixed
                 hover
-                paginationLabel={['Anterior', 'Próximo']}
+                paginationLabel={["Anterior", "Próximo"]}
                 searchLabel="Pesquisar"
                 entriesLabel="Exibir"
-                infoLabel={['Existe', 'de', 'de', 'Itens']}
+                infoLabel={["Existe", "de", "de", "Itens"]}
                 entriesOptions={[5, 10, 15]}
                 data={data}
               />

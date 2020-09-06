@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-import { getFileModelo } from "../download/DownloadAction";
-
 export default class OptionsMenu extends Component {
   render() {
     return (
@@ -25,10 +23,7 @@ export default class OptionsMenu extends Component {
           <button
             className="button-admin"
             id="import-csv"
-            onClick={() => {
-              this.props.showImportArea();
-              getFileModelo();
-            }}
+            onClick={() => this.props.showImportArea()}
           >
             Importar CSV
           </button>

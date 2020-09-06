@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import UploadArquivoUser from "../../components/upload/UploadUser";
 import UploadArquivoAdmin from "../../components/upload/UploadAdmin";
-import DownloadArquivo from "../../components/download/Downalod";
+import DownloadArquivo from "../../components/download/Download";
 import Table from "../../components/table/Table";
 
 export default class Import extends Component {

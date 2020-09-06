@@ -25,9 +25,7 @@ export default class ListCampaigns extends Component {
 
   componentDidMount() {
     axios
-      .get(
-        "https://review-feature-mo-rr70i1-test-api.esfera.site/portal-parceiro/v1/portal/api/partner"
-      )
+      .get("https://test-api.esfera.site/portal-parceiro/v1/portal/api/partner")
       .then((response) => {
         var partnersData = response.data.results;
 

@@ -28,9 +28,7 @@ export default class FormCampaign extends Component {
 
   componentDidMount() {
     axios
-      .get(
-        "https://review-feature-mo-rr70i1-test-api.esfera.site/portal-parceiro/v1/portal/api/partner"
-      )
+      .get("https://test-api.esfera.site/portal-parceiro/v1/portal/api/partner")
       .then((response) => {
         const partnersData = response.data.results;
 
@@ -146,7 +144,7 @@ export default class FormCampaign extends Component {
 
       axios
         .post(
-          "https://review-feature-mo-rr70i1-test-api.esfera.site/portal-parceiro/v1/portal/api/campaign",
+          "https://test-api.esfera.site/portal-parceiro/v1/portal/api/campaign",
           campaign,
           config
         )

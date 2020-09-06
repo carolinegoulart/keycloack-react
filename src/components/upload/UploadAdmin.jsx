@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { post } from "axios";
 import axios from "axios";
 
-import { getListImport } from "../table/TableActions";
+import getListImport from "../table/TableActions";
 import Modal from "../modal/Modal";
 
 class UploadAdmin extends Component {
@@ -51,9 +51,7 @@ class UploadAdmin extends Component {
 
   componentDidMount() {
     axios
-      .get(
-        "https://review-feature-mo-rr70i1-test-api.esfera.site/portal-parceiro/v1/portal/api/partner"
-      )
+      .get("https://test-api.esfera.site/portal-parceiro/v1/portal/api/partner")
       .then((response) => {
         const partnersData = response.data.results;
 
