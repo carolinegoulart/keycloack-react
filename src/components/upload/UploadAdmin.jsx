@@ -19,7 +19,7 @@ class UploadAdmin extends Component {
       subtitulo: "",
       codeError: "",
       tipo: "",
-      parsedCsvFile: {},
+      parsedCsvFile: null,
 
       partners: [],
 
@@ -96,8 +96,8 @@ class UploadAdmin extends Component {
       this.generateNewCsvFile();
 
       // OK: o arquivo enviado é o file, mas o conteúdo é o objeto parsedCsvFile
-      // console.log(this.state.parsedCsvFile);
-      // console.log(this.state.file);
+      console.log(this.state.parsedCsvFile);
+      console.log(this.state.file);
 
       //   this.fileUpload(this.state.file)
       //     .then((resp) => {
@@ -168,7 +168,6 @@ class UploadAdmin extends Component {
         "content-type": "multipart/form-data",
       },
     };
-
     return post(`${BASE_URL}/file`, formData, config);
   }
 
