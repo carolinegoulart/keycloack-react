@@ -19,7 +19,7 @@ class UploadAdmin extends Component {
       subtitulo: "",
       codeError: "",
       tipo: "",
-      parsedCsvFile: null,
+      parsedCsvFile: {},
 
       partners: [],
 
@@ -40,7 +40,6 @@ class UploadAdmin extends Component {
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
     this.fileUpload = this.fileUpload.bind(this);
-    this.onClear = this.onClear.bind(this);
     this.onHiden = this.onHiden.bind(this);
     this.getAsText = this.getAsText.bind(this);
     this.fileReadingFinished = this.fileReadingFinished.bind(this);
@@ -50,41 +49,36 @@ class UploadAdmin extends Component {
   }
 
   componentDidMount() {
-    axios
-      .get("https://test-api.esfera.site/portal-parceiro/v1/portal/api/partner")
-      .then((response) => {
-        const partnersData = response.data.results;
+    const BASE_URL =
+      "https://test-api.esfera.site/portal-parceiro/v1/portal/api";
 
-        if (partnersData) {
-          partnersData.sort(function(a, b) {
-            if (a.partnerName < b.partnerName) {
-              return -1;
-            }
-            if (a.partnerName > b.partnerName) {
-              return 1;
-            }
-            return 0;
-          });
+    axios.get(`${BASE_URL}/partner`).then((response) => {
+      const partnersData = response.data.results;
 
-          !this.isCancelled &&
-            this.setState({
-              partners: partnersData,
-              disabled_select: false,
-              loading_message: false,
-            });
-        } else {
-          !this.isCancelled &&
-            this.setState({
-              partners: [],
-              disabled_select: false,
-              loading_message: false,
-            });
-        }
-      });
-  }
+      if (partnersData) {
+        partnersData.sort(function(a, b) {
+          if (a.partnerName < b.partnerName) {
+            return -1;
+          }
+          if (a.partnerName > b.partnerName) {
+            return 1;
+          }
+          return 0;
+        });
 
-  componentWillUnmount() {
-    this.isCancelled = true;
+        this.setState({
+          partners: partnersData,
+          disabled_select: false,
+          loading_message: false,
+        });
+      } else {
+        this.setState({
+          partners: [],
+          disabled_select: false,
+          loading_message: false,
+        });
+      }
+    });
   }
 
   onFormSubmit(e) {
@@ -95,43 +89,48 @@ class UploadAdmin extends Component {
 
       this.generateNewCsvFile();
 
-      // OK: o arquivo enviado é o file, mas o conteúdo é o objeto parsedCsvFile
-      console.log(this.state.parsedCsvFile);
-      console.log(this.state.file);
-
-      //   this.fileUpload(this.state.file)
-      //     .then((resp) => {
-      //       this.onClear();
-      //       this.setState({ modal: true, tipo: "sucesso" });
-      //       this.props.getListImport();
-      //     })
-      //     .catch((error) => {
-      //       this.onClear();
-      //       if (typeof error.response.data.results.userMessage === "undefined") {
-      //         this.setState({
-      //           modal: true,
-      //           titulo:
-      //             "Erro inesperado entre em contato com nossos canais de atendimento",
-      //           codeError: error.response.data.results.code,
-      //           tipo: "error",
-      //         });
-      //       } else {
-      //         this.setState({
-      //           modal: true,
-      //           titulo: error.response.data.results.userMessage,
-      //           codeError: error.response.data.results.code,
-      //           tipo: "error",
-      //         });
-      //       }
-      //     });
-      // } else {
-      //   this.onClear();
-      //   this.setState({
-      //     modal: true,
-      //     titulo: "Selecione um arquivo csv para o envio!",
-      //     subtitulo: "Favor baixar o arquivo csv de modelo.",
-      //     tipo: "alerta",
-      //   });
+      this.fileUpload(this.state.file)
+        .then((resp) => {
+          this.setState({ modal: true, tipo: "sucesso" });
+          this.props.getListImport();
+        })
+        .catch((error) => {
+          this.onClear();
+          if (!error.response.data.results) {
+            this.setState({
+              modal: true,
+              titulo:
+                "Sua sessão expirou. Recarregue a página e tente novamente.",
+              codeError: error.response.data.results.code,
+              tipo: "error",
+            });
+          } else if (
+            typeof error.response.data.results.userMessage === "undefined"
+          ) {
+            this.setState({
+              modal: true,
+              titulo:
+                "Erro inesperado entre em contato com nossos canais de atendimento",
+              codeError: error.response.data.results.code,
+              tipo: "error",
+            });
+          } else {
+            this.setState({
+              modal: true,
+              titulo: error.response.data.results.userMessage,
+              codeError: error.response.data.results.code,
+              tipo: "error",
+            });
+          }
+        });
+    } else {
+      this.onClear();
+      this.setState({
+        modal: true,
+        titulo: "Selecione um arquivo csv para o envio!",
+        subtitulo: "Favor baixar o arquivo csv de modelo.",
+        tipo: "alerta",
+      });
     }
   }
 
@@ -160,14 +159,16 @@ class UploadAdmin extends Component {
 
   fileUpload(file) {
     const BASE_URL =
-      "https://review-feature-mo-nmdn1g-test-api.esfera.site/portal-parceiro/v1/portal/api";
+      "https://test-api.esfera.site/portal-parceiro/v1/portal/api";
     const formData = new FormData();
     formData.append("file", file);
+    // formData.append("partnerCode", this.state.partner_code);
     const config = {
       headers: {
         "content-type": "multipart/form-data",
       },
     };
+    console.log("formData: ", formData);
     return post(`${BASE_URL}/file`, formData, config);
   }
 
@@ -186,7 +187,6 @@ class UploadAdmin extends Component {
         });
         this.getAsText(e.target.files[0]);
       } else {
-        this.onClear();
         this.setState({
           modal: true,
           titulo: "Permitido apenas arquivo CSV!",
@@ -221,11 +221,6 @@ class UploadAdmin extends Component {
     this.setState({
       parsedCsvFile: object,
     });
-  }
-
-  onClear() {
-    this.setState({ file: null, nameFile: "Selecione um arquivo CSV" });
-    document.getElementById("customFileLang").value = "";
   }
 
   onHiden() {
@@ -411,7 +406,6 @@ class UploadAdmin extends Component {
 
                 <button
                   type="button"
-                  onClick={this.onClear}
                   className="btn btn-red "
                   id="delete-csv"
                   disabled={this.state.disabled_upload}
