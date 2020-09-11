@@ -53,42 +53,60 @@ class UploadUser extends Component {
         "https://test-api.esfera.site/portal-parceiro/v1/portal/api/partner/" +
         userCompany;
 
-      axios.get(URL).then((response) => {
-        const partner = response.data.results;
+      axios
+        .get(URL)
+        .then((response) => {
+          const partner = response.data.results;
 
-        !this.isCancelled &&
-          this.setState({
-            partner: partner,
-            partner_name: partner.partnerName,
-            partner_code: partner.partnerCode,
-          });
-
-        if (partner.campaigns) {
-          const campaigns = partner.campaigns;
-          campaigns.sort(function(a, b) {
-            if (a.campaignName < b.campaignName) {
-              return -1;
-            }
-            if (a.campaignName > b.campaignName) {
-              return 1;
-            }
-            return 0;
-          });
           !this.isCancelled &&
             this.setState({
-              partner_campaigns: campaigns,
-              disabled_select: false,
-              loading_message: false,
+              partner: partner,
+              partner_name: partner.partnerName,
+              partner_code: partner.partnerCode,
             });
-        } else {
-          !this.isCancelled &&
-            this.setState({
-              partner_campaigns: [],
-              disabled_select: false,
-              loading_message: false,
+
+          if (partner.campaigns) {
+            const campaigns = partner.campaigns;
+            campaigns.sort(function(a, b) {
+              if (a.campaignName < b.campaignName) {
+                return -1;
+              }
+              if (a.campaignName > b.campaignName) {
+                return 1;
+              }
+              return 0;
             });
-        }
-      });
+            !this.isCancelled &&
+              this.setState({
+                partner_campaigns: campaigns,
+                disabled_select: false,
+                loading_message: false,
+              });
+          } else {
+            !this.isCancelled &&
+              this.setState({
+                partner_campaigns: [],
+                disabled_select: false,
+                loading_message: false,
+              });
+          }
+        })
+        .catch((error) => {
+          if (error.response) {
+            const httpStatusError = JSON.stringify(error.response.status);
+            if (httpStatusError === "404") {
+              this.setState({
+                loading_message:
+                  "Parceiro não cadastrado. Entre em contato com um de nossos canais de atendimento.",
+              });
+            } else {
+              this.setState({
+                loading_message:
+                  "Ocorreu um erro. Entre em contato com um de nossos canais de atendimento.",
+              });
+            }
+          }
+        });
     });
   }
 
