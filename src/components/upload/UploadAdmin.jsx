@@ -40,12 +40,11 @@ class UploadAdmin extends Component {
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
     this.fileUpload = this.fileUpload.bind(this);
+    this.onClear = this.onClear.bind(this);
     this.onHiden = this.onHiden.bind(this);
     this.getAsText = this.getAsText.bind(this);
     this.fileReadingFinished = this.fileReadingFinished.bind(this);
     this.processData = this.processData.bind(this);
-    this.updateCsvData = this.updateCsvData.bind(this);
-    this.generateNewCsvFile = this.generateNewCsvFile.bind(this);
   }
 
   componentDidMount() {
@@ -85,9 +84,18 @@ class UploadAdmin extends Component {
     if (this.state.file != null) {
       e.preventDefault();
 
-      this.updateCsvData();
+      const object = this.state.parsedCsvFile;
+      object["Campaign Name"] = this.state.campaign_name;
+      object["Campaign Code"] = this.state.campaign_code;
 
-      this.generateNewCsvFile();
+      const rows = [Object.keys(object), Object.values(object)];
+
+      let csvContent = rows.map((e) => e.join(";")).join("\n");
+
+      let csvFile = new Blob([csvContent], {
+        encoding: "UTF-8",
+        type: "text/plain;charset=UTF-8",
+      });
 
       this.fileUpload(this.state.file)
         .then((resp) => {
@@ -132,29 +140,6 @@ class UploadAdmin extends Component {
         tipo: "alerta",
       });
     }
-  }
-
-  updateCsvData() {
-    const csvObject = this.state.parsedCsvFile;
-    csvObject["Campaign Name"] = this.state.campaign_name;
-    csvObject["Campaign Code"] = this.state.campaign_code;
-    this.setState({
-      parsedCsvFile: csvObject,
-    });
-  }
-
-  generateNewCsvFile() {
-    const object = this.state.parsedCsvFile;
-    const rows = [Object.keys(object), Object.values(object)];
-
-    let csvContent =
-      "data:text/csv;charset=utf-8," + rows.map((e) => e.join(";")).join("\n");
-
-    var newFile = encodeURI(csvContent);
-
-    this.setState({
-      file: newFile,
-    });
   }
 
   fileUpload(file) {
