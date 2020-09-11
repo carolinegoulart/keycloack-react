@@ -67,6 +67,7 @@ class UploadUser extends Component {
 
           if (partner.campaigns) {
             const campaigns = partner.campaigns;
+
             campaigns.sort(function(a, b) {
               if (a.campaignName < b.campaignName) {
                 return -1;
@@ -76,18 +77,18 @@ class UploadUser extends Component {
               }
               return 0;
             });
+
             !this.isCancelled &&
               this.setState({
                 partner_campaigns: campaigns,
                 disabled_select: false,
-                loading_message: false,
+                message_loading_campaigns: false,
               });
           } else {
             !this.isCancelled &&
               this.setState({
-                partner_campaigns: [],
-                disabled_select: false,
-                loading_message: false,
+                message_loading_campaigns:
+                  "Não há campanhas cadastradas. Entre em contato com um de nossos canais de atendimento",
               });
           }
         })
@@ -96,12 +97,12 @@ class UploadUser extends Component {
             const httpStatusError = JSON.stringify(error.response.status);
             if (httpStatusError === "404") {
               this.setState({
-                loading_message:
+                message_loading_campaigns:
                   "Parceiro não cadastrado. Entre em contato com um de nossos canais de atendimento.",
               });
             } else {
               this.setState({
-                loading_message:
+                message_loading_campaigns:
                   "Ocorreu um erro. Entre em contato com um de nossos canais de atendimento.",
               });
             }
