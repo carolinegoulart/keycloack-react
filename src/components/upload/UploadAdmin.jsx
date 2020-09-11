@@ -89,7 +89,6 @@ class UploadAdmin extends Component {
       object["Campaign Code"] = this.state.campaign_code;
 
       const rows = [Object.keys(object), Object.values(object)];
-
       let csvContent = rows.map((e) => e.join(";")).join("\n");
 
       let csvFile = new Blob([csvContent], {

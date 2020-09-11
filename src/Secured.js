@@ -29,10 +29,7 @@ class Secured extends Component {
         const decryptedToken = jwt.decode(keycloak.token);
 
         if (decryptedToken.realm_access) {
-          if (
-            decryptedToken.realm_access.roles.includes("ADMIN") ||
-            decryptedToken.realm_access.roles.includes("admin")
-          ) {
+          if (decryptedToken.realm_access.roles.includes("admin")) {
             this.setState({ isAdmin: true });
           } else {
             this.setState({
