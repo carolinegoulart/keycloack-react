@@ -107,11 +107,21 @@ export default class FormPartner extends Component {
 
   handlePartnerNameInputChange = (event) => {
     event.preventDefault();
-    this.setState({
-      partner_name: event.target.value,
-      partner_name_error: "",
-      successMsg: "",
-    });
+    if (event.target.value != null) {
+      this.setState({
+        partner_name:
+          this.state.partner_name[0].toUpperCase() +
+          this.state.partner_name.substr(1),
+        partner_name_error: "",
+        successMsg: "",
+      });
+    } else {
+      this.setState({
+        partner_name: event.target.value,
+        partner_name_error: "",
+        successMsg: "",
+      });
+    }
   };
 
   handlePartnerCodeInputChange = (event) => {
