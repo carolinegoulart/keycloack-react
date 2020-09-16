@@ -30,6 +30,13 @@ export default class FormPartner extends Component {
       partner_code_error = "O código do parceiro deve conter 3 caracteres";
     }
 
+    if (
+      this.state.partner_code.length === 3 &&
+      /\d/.test(this.state.partner_code)
+    ) {
+      partner_code_error = "O código do parceiro deve conter somente letras";
+    }
+
     if (partner_name_error || partner_code_error) {
       this.setState({
         partner_name_error,
@@ -101,21 +108,21 @@ export default class FormPartner extends Component {
   handlePartnerNameInputChange = (event) => {
     event.preventDefault();
     this.setState({
-      [event.target.name]: event.target.value,
-      [event.target.name + "_error"]: "",
+      partner_name: event.target.value,
+      partner_name_error: "",
       successMsg: "",
     });
   };
 
-  handlePartnerCodeTextInputChange = (event) => {
+  handlePartnerCodeInputChange = (event) => {
     event.preventDefault();
     this.setState({
-      [event.target.name]: event.target.value,
+      partner_code: event.target.value.toUpperCase(),
       successMsg: "",
     });
     if (event.target.value.length === 3) {
       this.setState({
-        [event.target.name + "_error"]: "",
+        partner_code_error: "",
       });
     }
   };
@@ -135,6 +142,7 @@ export default class FormPartner extends Component {
               id="partner_name"
               name="partner_name"
               onChange={this.handlePartnerNameInputChange}
+              maxLength="100"
             />
           </div>
           <div className="error-msg">{this.state.partner_name_error}</div>
@@ -146,7 +154,7 @@ export default class FormPartner extends Component {
               type="text"
               id="partner_code"
               name="partner_code"
-              onChange={this.handlePartnerCodeTextInputChange}
+              onChange={this.handlePartnerCodeInputChange}
               maxLength="3"
             />
           </div>
